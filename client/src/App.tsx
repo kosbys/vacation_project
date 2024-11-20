@@ -6,6 +6,7 @@ import {
 import Login from "./Components/Login.tsx";
 import Register from "./Components/Register.tsx";
 import Vacations from "./Components/Vacations.tsx";
+import AddVacation from "./Components/AddVacation.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "vacations",
     element: <Vacations />,
+  },
+  {
+    path: "addvacation",
+    element: <AddVacation />,
   },
 ]);
 
