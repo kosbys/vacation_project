@@ -7,6 +7,7 @@ import Login from "./Components/Login.tsx";
 import Register from "./Components/Register.tsx";
 import Vacations from "./Components/Vacations.tsx";
 import AddVacation from "./Components/AddVacation.tsx";
+import EditVacation from "./Components/EditVacation.tsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: "addvacation",
     element: <AddVacation />,
+  },
+  {
+    path: "editvacation",
+    element: <EditVacation />,
   },
 ]);
 
