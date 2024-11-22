@@ -4,12 +4,11 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import img from "../assets/contemplative-reptile.jpg";
 
 export default function UserVacation({}) {
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardMedia sx={{ height: 140 }} image={img} title="green iguana" />
+      <CardMedia sx={{ height: 140 }} image={""} title="green iguana" />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           Lizard
