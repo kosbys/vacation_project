@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node server.js"
+    "start": "npx ts-node server.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -10,7 +10,8 @@
     "express": "^4.21.1",
     "formidable": "^3.5.2",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.11.4"
+    "mysql2": "^3.11.4",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

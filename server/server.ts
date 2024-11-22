@@ -1,16 +1,21 @@
-import express, { Request, Response } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import mysql from "mysql2";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import formidable from "formidable";
 import path from "path";
 import fs from "fs";
 import { hashPassword, comparePasswords } from "./passwordHelpers";
-import { error } from "console";
 
-const app = express();
+dotenv.config();
 
+const app: Application = express();
+const PORT = process.env.PORT;
+const JWT_SECRET =
+  process.env.JWT_SECRET ||
+  "a086241da7c28c774676bb9074bd49edfe709abef83efc5a457992e183693f70";
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -26,6 +31,7 @@ db.connect((err) => {
 });
 
 app.use(cors());
+app.use(bodyParser.json());
 app.use(express.static("public"));
 
 // check dupe email
@@ -40,7 +46,7 @@ app.post("/register", (req: Request, res: Response): void => {
   hashPassword(password)
     .then((hashedPassword) => {
       db.query(
-        `INSERT INTO users (first_name, last_name, email, password, role) VALUES (${firstName}, ${lastName}, ${email}, ${hashedPassword}, "admin")`,
+        `INSERT INTO users (first_name, last_name, email, password, role) VALUES ("${firstName}", "${lastName}", "${email}", "${hashedPassword}", "admin")`,
         (err) => {
           if (err) {
             if (err.code === "ER_DUP_ENTRY") {
@@ -61,14 +67,60 @@ app.post("/register", (req: Request, res: Response): void => {
     });
 });
 
-app.post("/login", (req, res) => {});
+app.post("/login", (req: Request, res: Response): void => {
+  const { email, password } = req.body;
 
-app.post("/vacation", (req, res) => {});
+  if (!email || !password) {
+    res.status(400).json({ message: "Please do not leave any fields empty" });
+    return;
+  }
+
+  db.query(
+    `SELECT * FROM users WHERE email = ${email}`,
+    (err, results: any[]) => {
+      if (err) {
+        res.status(500).json({ message: "DB error", error: err });
+        return;
+      }
+
+      if (results.length === 0) {
+        res.status(400).json({ message: "No user found" });
+        return;
+      }
+
+      const user = results[0];
+      comparePasswords(password, user.password)
+        .then((match) => {
+          if (!match) {
+            res.status(400).json({ message: "Invalid password" });
+          }
+
+          const jwtToken = jwt.sign(
+            { id: user.id, email: user.email },
+            JWT_SECRET,
+            {
+              expiresIn: "24h",
+            }
+          );
+
+          res.status(200).json({ message: "Logged on!", jwtToken });
+        })
+        .catch((err) => {
+          res.status(500).json({ message: "Error ", err });
+        });
+    }
+  );
+});
+
+app.post("/vacation", (req, res) => {
+  const { destination, description, startDate, endDate, price, image } =
+    req.body;
+});
 
 app.put("/vacation", (req, res) => {});
 
 app.get("/vacations", (req, res) => {});
 
-app.listen(3000, () => {
-  console.log(`Server listening at http://localhost:3000`);
+app.listen(PORT, () => {
+  console.log(`Server listening at http://localhost:${PORT}`);
 });

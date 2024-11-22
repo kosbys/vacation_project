@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { Button, TextField, Typography, Stack, Box, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import Joi from "joi";
+import axios from "axios";
 import { joiResolver } from "@hookform/resolvers/joi";
 
 interface FormData {
@@ -44,8 +45,16 @@ export default function Register() {
     formState: { errors },
   } = useForm<FormData>({ resolver: joiResolver(validationSchema) });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log("Form Submitted", data);
+    await axios
+      .post("http://localhost:3000/register", data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+      });
   };
 
   return (
