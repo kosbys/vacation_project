@@ -62,6 +62,8 @@ export default function Register() {
       .post("http://localhost:3000/register", data)
       .then((res) => {
         console.log(res);
+        console.log(res.data.token);
+
         // REDIRECT TO VACATIONS
       })
       .catch((err) => {

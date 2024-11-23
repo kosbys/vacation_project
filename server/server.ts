@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import formidable from "formidable";
 import path from "path";
 import fs from "fs";
+import { User } from "./types";
 import { hashPassword, comparePasswords } from "./passwordHelpers";
 
 dotenv.config();
@@ -64,7 +65,7 @@ app.post("/register", (req: Request, res: Response): void => {
             (_: any, result: User[]) => {
               const user: User = result[0];
 
-              const jwtToken = jwt.sign(
+              const token = jwt.sign(
                 { id: user.id, email: user.email },
                 JWT_SECRET,
                 {
@@ -72,12 +73,10 @@ app.post("/register", (req: Request, res: Response): void => {
                 }
               );
 
-              res
-                .status(201)
-                .json({
-                  message: "Successfully registered and logged in",
-                  jwtToken,
-                });
+              res.status(201).json({
+                message: "Successfully registered and logged in",
+                token,
+              });
             }
           );
         }
@@ -119,7 +118,7 @@ app.post("/login", (req: Request, res: Response): void => {
             return;
           }
 
-          const jwtToken = jwt.sign(
+          const token = jwt.sign(
             { id: user.id, email: user.email },
             JWT_SECRET,
             {
@@ -127,7 +126,7 @@ app.post("/login", (req: Request, res: Response): void => {
             }
           );
 
-          res.status(200).json({ message: "Logged on!", jwtToken });
+          res.status(200).json({ message: "Logged on!", token });
           return;
         })
         .catch((err) => {

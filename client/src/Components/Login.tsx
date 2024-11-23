@@ -50,6 +50,8 @@ export default function Login() {
       .post("http://localhost:3000/login", data)
       .then((res) => {
         console.log(res);
+        console.log(res.data.token);
+
         // REDIRECT TO VACATIONS
       })
       .catch((err) => {
