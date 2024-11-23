@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import mysql, { QueryResult } from "mysql2";
+import mysql from "mysql2";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -17,6 +17,7 @@ const PORT = process.env.PORT;
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   "a086241da7c28c774676bb9074bd49edfe709abef83efc5a457992e183693f70";
+
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -31,7 +32,7 @@ db.connect((err) => {
   }
 });
 
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
