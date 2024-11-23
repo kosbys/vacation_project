@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import mysql from "mysql2";
+import mysql, { QueryResult } from "mysql2";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -46,7 +46,7 @@ app.post("/register", (req: Request, res: Response): void => {
   hashPassword(password)
     .then((hashedPassword) => {
       db.query(
-        `INSERT INTO users (first_name, last_name, email, password, role) VALUES ("${firstName}", "${lastName}", "${email}", "${hashedPassword}", "admin")`,
+        `INSERT INTO users (first_name, last_name, email, password, role) VALUES ("${firstName}", "${lastName}", "${email}", "${hashedPassword}", "user")`,
         (err) => {
           if (err) {
             if (err.code === "ER_DUP_ENTRY") {
@@ -58,7 +58,28 @@ app.post("/register", (req: Request, res: Response): void => {
             res.status(500).json({ message: "DB error", error: err });
             return;
           }
-          res.status(201).json({ message: "Successfully registered" });
+
+          db.query(
+            `SELECT * FROM users WHERE email = "${email}"`,
+            (_: any, result: User[]) => {
+              const user: User = result[0];
+
+              const jwtToken = jwt.sign(
+                { id: user.id, email: user.email },
+                JWT_SECRET,
+                {
+                  expiresIn: "24h",
+                }
+              );
+
+              res
+                .status(201)
+                .json({
+                  message: "Successfully registered and logged in",
+                  jwtToken,
+                });
+            }
+          );
         }
       );
     })
@@ -76,7 +97,7 @@ app.post("/login", (req: Request, res: Response): void => {
   }
 
   db.query(
-    `SELECT * FROM users WHERE email = ${email}`,
+    `SELECT * FROM users WHERE email = "${email}"`,
     (err, results: any[]) => {
       if (err) {
         res.status(500).json({ message: "DB error", error: err });
@@ -84,7 +105,9 @@ app.post("/login", (req: Request, res: Response): void => {
       }
 
       if (results.length === 0) {
-        res.status(400).json({ message: "No user found" });
+        res
+          .status(400)
+          .json({ message: "No user found with that email address" });
         return;
       }
 
@@ -93,6 +116,7 @@ app.post("/login", (req: Request, res: Response): void => {
         .then((match) => {
           if (!match) {
             res.status(400).json({ message: "Invalid password" });
+            return;
           }
 
           const jwtToken = jwt.sign(
@@ -104,9 +128,11 @@ app.post("/login", (req: Request, res: Response): void => {
           );
 
           res.status(200).json({ message: "Logged on!", jwtToken });
+          return;
         })
         .catch((err) => {
           res.status(500).json({ message: "Error ", err });
+          return;
         });
     }
   );
