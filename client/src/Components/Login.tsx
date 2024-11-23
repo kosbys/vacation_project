@@ -8,11 +8,11 @@ import {
   Link,
   Alert,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import axios from "axios";
-import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 interface FormData {
   email: string;
@@ -42,22 +42,17 @@ export default function Login() {
     reset,
     formState: { errors },
   } = useForm<FormData>({ resolver: joiResolver(validationSchema) });
-
-  const [formError, setFormError] = useState({ error: false, message: "" });
+  const navigate = useNavigate();
+  const { handleLogin, error } = useContext(AuthContext)!;
 
   const onSubmit = async (data: FormData) => {
-    await axios
-      .post("http://localhost:3000/login", data)
-      .then((res) => {
-        console.log(res);
-        console.log(res.data.token);
+    handleLogin(data.email, data.password);
 
-        // REDIRECT TO VACATIONS
-      })
-      .catch((err) => {
-        setFormError({ error: true, message: err.response.data.message });
-        reset();
-      });
+    if (error) {
+      reset();
+    } else {
+      navigate("/test");
+    }
   };
 
   return (
@@ -116,9 +111,9 @@ export default function Login() {
         </Stack>
       </form>
 
-      {formError.error && (
+      {error && (
         <Alert sx={{ marginTop: "10px" }} severity="error">
-          {formError.message}
+          {error}
         </Alert>
       )}
 

@@ -8,11 +8,11 @@ import {
   Link,
   Alert,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import Joi from "joi";
-import axios from "axios";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 interface FormData {
   firstName: string;
@@ -54,22 +54,17 @@ export default function Register() {
     reset,
     formState: { errors },
   } = useForm<FormData>({ resolver: joiResolver(validationSchema) });
+  const navigate = useNavigate();
 
-  const [formError, setFormError] = useState({ error: false, message: "" });
+  const { handleRegister, error } = useContext(AuthContext)!;
 
   const onSubmit = async (data: FormData) => {
-    await axios
-      .post("http://localhost:3000/register", data)
-      .then((res) => {
-        console.log(res);
-        console.log(res.data.token);
-
-        // REDIRECT TO VACATIONS
-      })
-      .catch((err) => {
-        setFormError({ error: true, message: err.response.data.message });
-        reset();
-      });
+    handleRegister(data);
+    if (error) {
+      reset();
+    } else {
+      navigate("/test");
+    }
   };
 
   return (
@@ -148,9 +143,9 @@ export default function Register() {
         </Stack>
       </form>
 
-      {formError.error && (
+      {error && (
         <Alert sx={{ marginTop: "10px" }} severity="error">
-          {formError.message}
+          {error}
         </Alert>
       )}
 
