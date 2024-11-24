@@ -5,13 +5,12 @@ import Register from "./Components/Register.tsx";
 import Vacations from "./Components/Vacations.tsx";
 import AddVacation from "./Components/AddVacation.tsx";
 import EditVacation from "./Components/EditVacation.tsx";
-import { Typography } from "@mui/material";
 import React, { useContext } from "react";
+import Header from "./Components/Header.tsx";
+import NotFound from "./Components/NotFound.tsx";
 
 const ProtectedRoute: React.FC<{ element: JSX.Element }> = ({ element }) => {
   const { user } = useContext(AuthContext)!;
-
-  console.log(user);
 
   return user ? element : <Navigate to="/register" />;
 };
@@ -32,30 +31,30 @@ const AdminRoute: React.FC<{ element: JSX.Element }> = ({ element }) => {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<ProtectedRoute element={<Vacations />} />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/vacations"
-            element={<ProtectedRoute element={<Vacations />} />}
-          />
-          <Route
-            path="/addvacation"
-            element={<AdminRoute element={<AddVacation />} />}
-          />
-          <Route
-            path="/editvacation"
-            element={<AdminRoute element={<EditVacation />} />}
-          />
-          <Route
-            path="*"
-            element={<Typography>ERROR 404 NOTHING IN THIS PAGE</Typography>}
-          />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <>
+      <AuthProvider>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route index element={<ProtectedRoute element={<Vacations />} />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/vacations"
+              element={<ProtectedRoute element={<Vacations />} />}
+            />
+            <Route
+              path="/addvacation"
+              element={<AdminRoute element={<AddVacation />} />}
+            />
+            <Route
+              path="/editvacation"
+              element={<AdminRoute element={<EditVacation />} />}
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </>
   );
 }

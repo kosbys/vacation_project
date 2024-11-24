@@ -19,6 +19,7 @@ type AuthContextType = {
   user: User | null;
   handleLogin: (email: string, password: string) => Promise<boolean>;
   handleRegister: (form: RegisterForm) => Promise<boolean>;
+  handleLogout: () => void;
   error: string | null;
 };
 
@@ -79,8 +80,16 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       });
   };
 
+  const handleLogout = () => {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem("token");
+  };
+
   return (
-    <AuthContext.Provider value={{ user, handleLogin, handleRegister, error }}>
+    <AuthContext.Provider
+      value={{ user, handleLogin, handleRegister, handleLogout, error }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );
