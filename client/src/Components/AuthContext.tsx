@@ -9,7 +9,7 @@ type RegisterForm = {
   password: string;
 };
 
-type User = {
+export type User = {
   id: number;
   email: string;
   role: "user" | "admin";
@@ -63,7 +63,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       });
   };
 
-  const handleRegister = (form: RegisterForm) => {
+  const handleRegister = (form: RegisterForm): Promise<boolean> => {
     return axios
       .post("/register", form, {
         baseURL: "http://localhost:3000",
