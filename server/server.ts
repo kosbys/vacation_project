@@ -67,7 +67,7 @@ app.post("/register", (req: Request, res: Response): void => {
               const user: User = result[0];
 
               const token = jwt.sign(
-                { id: user.id, email: user.email },
+                { id: user.id, email: user.email, role: user.role },
                 JWT_SECRET,
                 {
                   expiresIn: "24h",
@@ -120,7 +120,7 @@ app.post("/login", (req: Request, res: Response): void => {
           }
 
           const token = jwt.sign(
-            { id: user.id, email: user.email },
+            { id: user.id, email: user.email, role: user.role },
             JWT_SECRET,
             {
               expiresIn: "24h",

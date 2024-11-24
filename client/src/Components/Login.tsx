@@ -46,9 +46,9 @@ export default function Login() {
   const { handleLogin, error } = useContext(AuthContext)!;
 
   const onSubmit = async (data: FormData) => {
-    handleLogin(data.email, data.password);
+    const success = await handleLogin(data.email, data.password);
 
-    if (error) {
+    if (!success) {
       reset();
     } else {
       navigate("/test");

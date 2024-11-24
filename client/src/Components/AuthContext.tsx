@@ -11,8 +11,8 @@ type RegisterForm = {
 
 type AuthContextType = {
   user: string | null;
-  handleLogin: (email: string, password: string) => void;
-  handleRegister: (form: RegisterForm) => void;
+  handleLogin: (email: string, password: string) => Promise<boolean>;
+  handleRegister: (form: RegisterForm) => Promise<boolean>;
   error: string | null;
 };
 
@@ -32,11 +32,12 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
   useEffect(() => {
     if (token) {
       setUser(jwtDecode(token));
+      console.log(jwtDecode(token));
     }
   }, [token]);
 
-  const handleLogin = (email: string, password: string) => {
-    axios
+  const handleLogin = (email: string, password: string): Promise<boolean> => {
+    return axios
       .post(
         "/login",
         { email, password },
@@ -47,23 +48,27 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       .then((res) => {
         setToken(res.data.token);
         localStorage.setItem("jwt", res.data.token);
+        return true;
       })
       .catch((err) => {
         setError(err.response.data.message);
+        return false;
       });
   };
 
   const handleRegister = (form: RegisterForm) => {
-    axios
+    return axios
       .post("/register", form, {
         baseURL: "http://localhost:3000",
       })
       .then((res) => {
         setToken(res.data.token);
         localStorage.setItem("jwt", res.data.token);
+        return true;
       })
       .catch((err) => {
         setError(err.response.data.message);
+        return false;
       });
   };
 
