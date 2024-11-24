@@ -8,7 +8,7 @@ import {
   Link,
   Alert,
 } from "@mui/material";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Navigate, Link as RouterLink, useNavigate } from "react-router-dom";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useContext } from "react";
@@ -43,7 +43,7 @@ export default function Login() {
     formState: { errors },
   } = useForm<FormData>({ resolver: joiResolver(validationSchema) });
   const navigate = useNavigate();
-  const { handleLogin, error } = useContext(AuthContext)!;
+  const { user, handleLogin, error } = useContext(AuthContext)!;
 
   const onSubmit = async (data: FormData) => {
     const success = await handleLogin(data.email, data.password);
@@ -54,6 +54,10 @@ export default function Login() {
       navigate("/vacations");
     }
   };
+
+  if (user) {
+    return <Navigate to="/vacations" />;
+  }
 
   return (
     <Box

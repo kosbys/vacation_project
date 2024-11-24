@@ -13,44 +13,43 @@ export default function Header() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>
+        <Typography sx={{ flexGrow: 1 }} variant="h5">
           Vacation App
         </Typography>
 
-        {user?.role === "admin" ? (
+        {user ? (
           <Stack direction="row" spacing={2}>
-            <Button
-              color="inherit"
-              variant="outlined"
-              component={Link}
-              to="/addvacation"
-            >
-              Add Vacation
-            </Button>
-            <Button
-              color="inherit"
-              variant="outlined"
-              component={Link}
-              to="/report"
-            >
-              Report
-            </Button>
+            {user.role === "admin" ? (
+              <>
+                <Button
+                  color="inherit"
+                  variant="outlined"
+                  component={Link}
+                  to="/addvacation"
+                >
+                  Add Vacation
+                </Button>
+                <Button
+                  color="inherit"
+                  variant="outlined"
+                  component={Link}
+                  to="/report"
+                >
+                  Report
+                </Button>
+              </>
+            ) : (
+              ""
+            )}
             <Button color="inherit" component={Link} to="/vacations">
               Vacations
             </Button>
-            <Button variant="contained" color="error" onClick={handleLogout}>
-              Logout
-            </Button>
-          </Stack>
-        ) : (
-          ""
-        )}
-
-        {user?.role === "user" ? (
-          <Stack direction="row" spacing={2}>
-            <Button color="inherit" component={Link} to="/vacations">
-              Vacations
-            </Button>
+            <Typography
+              variant="subtitle2"
+              sx={{ alignSelf: "center", textDecoration: "underline" }}
+            >
+              {user.role === "admin" ? "Admin" : ""} {user.name}
+            </Typography>
             <Button variant="contained" color="error" onClick={handleLogout}>
               Logout
             </Button>
