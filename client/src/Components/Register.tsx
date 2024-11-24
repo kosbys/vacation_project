@@ -63,8 +63,7 @@ export default function Register() {
     if (error) {
       reset();
     } else {
-      // TO DO
-      navigate("/test");
+      navigate("/vacations");
     }
   };
 

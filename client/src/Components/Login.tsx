@@ -51,7 +51,7 @@ export default function Login() {
     if (!success) {
       reset();
     } else {
-      navigate("/test");
+      navigate("/vacations");
     }
   };
 

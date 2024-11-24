@@ -9,8 +9,14 @@ type RegisterForm = {
   password: string;
 };
 
+type User = {
+  id: number;
+  email: string;
+  role: "user" | "admin";
+};
+
 type AuthContextType = {
-  user: string | null;
+  user: User | null;
   handleLogin: (email: string, password: string) => Promise<boolean>;
   handleRegister: (form: RegisterForm) => Promise<boolean>;
   error: string | null;
@@ -23,17 +29,18 @@ type AuthProviderChildren = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthProvider = ({ children }: AuthProviderChildren) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(
     localStorage.getItem("token")
   );
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (token) {
       setUser(jwtDecode(token));
-      console.log(jwtDecode(token));
     }
+    setLoading(false);
   }, [token]);
 
   const handleLogin = (email: string, password: string): Promise<boolean> => {
@@ -47,7 +54,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       )
       .then((res) => {
         setToken(res.data.token);
-        localStorage.setItem("jwt", res.data.token);
+        localStorage.setItem("token", res.data.token);
         return true;
       })
       .catch((err) => {
@@ -63,7 +70,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       })
       .then((res) => {
         setToken(res.data.token);
-        localStorage.setItem("jwt", res.data.token);
+        localStorage.setItem("token", res.data.token);
         return true;
       })
       .catch((err) => {
@@ -74,7 +81,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
 
   return (
     <AuthContext.Provider value={{ user, handleLogin, handleRegister, error }}>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
