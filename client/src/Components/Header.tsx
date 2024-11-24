@@ -5,10 +5,10 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
+import { Stack } from "@mui/material";
 
 export default function Header() {
-  // use auth to customize header based on logged in status and role
-  const { user } = useContext(AuthContext)!;
+  const { user, handleLogout } = useContext(AuthContext)!;
 
   return (
     <AppBar position="static">
@@ -16,15 +16,61 @@ export default function Header() {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Vacation App
         </Typography>
-        <Button color="inherit" component={Link} to="/vacations">
-          Vacations
-        </Button>
-        <Button color="inherit" component={Link} to="/register">
-          Register
-        </Button>
-        <Button color="inherit" component={Link} to="/login">
-          Log in
-        </Button>
+
+        {user?.role === "admin" ? (
+          <Stack direction="row" spacing={2}>
+            <Button
+              color="inherit"
+              variant="outlined"
+              component={Link}
+              to="/addvacation"
+            >
+              Add Vacation
+            </Button>
+            <Button
+              color="inherit"
+              variant="outlined"
+              component={Link}
+              to="/report"
+            >
+              Report
+            </Button>
+            <Button color="inherit" component={Link} to="/vacations">
+              Vacations
+            </Button>
+            <Button variant="contained" color="error" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Stack>
+        ) : (
+          ""
+        )}
+
+        {user?.role === "user" ? (
+          <Stack direction="row" spacing={2}>
+            <Button color="inherit" component={Link} to="/vacations">
+              Vacations
+            </Button>
+            <Button variant="contained" color="error" onClick={handleLogout}>
+              Logout
+            </Button>
+          </Stack>
+        ) : (
+          ""
+        )}
+
+        {!user ? (
+          <Stack direction="row" spacing={2}>
+            <Button color="inherit" component={Link} to="/register">
+              Register
+            </Button>
+            <Button color="inherit" component={Link} to="/login">
+              Log in
+            </Button>
+          </Stack>
+        ) : (
+          ""
+        )}
       </Toolbar>
     </AppBar>
   );

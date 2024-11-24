@@ -8,6 +8,7 @@ import EditVacation from "./Components/EditVacation.tsx";
 import React, { useContext } from "react";
 import Header from "./Components/Header.tsx";
 import NotFound from "./Components/NotFound.tsx";
+import VacationReport from "./Components/Report.tsx";
 
 const ProtectedRoute: React.FC<{ element: JSX.Element }> = ({ element }) => {
   const { user } = useContext(AuthContext)!;
@@ -46,6 +47,10 @@ export default function App() {
             <Route
               path="/addvacation"
               element={<AdminRoute element={<AddVacation />} />}
+            />
+            <Route
+              path="/report"
+              element={<AdminRoute element={<VacationReport />} />}
             />
             <Route
               path="/editvacation"
