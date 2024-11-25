@@ -130,7 +130,8 @@ app.post("/login", (req: Request, res: Response): void => {
               id: user.id,
               email: user.email,
               role: user.role,
-              name: `${user.first_name} ${user.last_name}`,
+              firstName: user.first_name,
+              lastName: user.last_name,
             },
             JWT_SECRET,
             {
@@ -149,7 +150,17 @@ app.post("/login", (req: Request, res: Response): void => {
   );
 });
 
-// DO THIS
+app.get("/vacations", (req, res): void => {
+  db.query("SELECT * FROM vacations", (err, results) => {
+    if (err) {
+      res.status(500).json({ error: err });
+      return;
+    }
+
+    res.status(200).json(results);
+  });
+});
+
 app.post("/vacation", (req, res): void => {
   const form = formidable({
     multiples: false,
@@ -170,7 +181,7 @@ app.post("/vacation", (req, res): void => {
         new Date(fields.startDate![0]).toISOString().split("T")[0]
       }",
        "${new Date(fields.endDate![0]).toISOString().split("T")[0]}",
-        "${fields.price}", "${files!.image![0].originalFilename}")`,
+        "${fields.price}", "${files!.image![0].newFilename}")`,
       (err) => {
         if (err) {
           res.status(500).json({ message: "DB error", error: err });

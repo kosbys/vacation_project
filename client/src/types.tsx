@@ -3,7 +3,19 @@ import { ReactNode } from "react";
 type User = {
   id: number;
   email: string;
+  firstName: string;
+  lastName: string;
   role: "user" | "admin";
+};
+
+type Vacation = {
+  id: number;
+  destination: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
+  price: number;
+  filename: string;
 };
 
 type RegisterForm = {
@@ -42,6 +54,7 @@ type AuthProviderChildren = {
 
 export type {
   User,
+  Vacation,
   RegisterForm,
   UploadForm,
   LoginForm,

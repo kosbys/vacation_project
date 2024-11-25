@@ -48,7 +48,8 @@ export default function Header() {
               variant="subtitle2"
               sx={{ alignSelf: "center", textDecoration: "underline" }}
             >
-              {user.role === "admin" ? "Admin" : ""} {user.name}
+              {user.role === "admin" ? "Admin" : ""}{" "}
+              {`${user.firstName} ${user.lastName}`}
             </Typography>
             <Button variant="contained" color="error" onClick={handleLogout}>
               Logout
