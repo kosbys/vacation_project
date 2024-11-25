@@ -118,6 +118,7 @@ export default function AddVacation() {
         message: "Successfully uploaded vacation",
         open: true,
       });
+      setImagePreview(null);
       reset();
     } else {
       setSuccessAlert({ message: "", open: false });
