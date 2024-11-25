@@ -13,13 +13,7 @@ import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
-
-interface FormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+import { RegisterForm } from "../types";
 
 const validationSchema = Joi.object({
   firstName: Joi.string().max(30).required().messages({
@@ -53,12 +47,12 @@ export default function Register() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>({ resolver: joiResolver(validationSchema) });
+  } = useForm<RegisterForm>({ resolver: joiResolver(validationSchema) });
   const navigate = useNavigate();
 
   const { user, handleRegister, error } = useContext(AuthContext)!;
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: RegisterForm) => {
     handleRegister(data);
     if (error) {
       reset();

@@ -13,17 +13,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
-
-interface FormData {
-  destination: string;
-  description: string;
-  startDate: Date | null;
-  endDate: Date | null;
-  price: string;
-  image: File | null;
-}
+import { UploadForm } from "../types";
+import { AuthContext } from "./AuthContext";
+import SuccessAlert from "./SuccessAlert";
 
 const validationSchema = Joi.object({
   destination: Joi.string().required().messages({
@@ -84,36 +78,49 @@ export default function AddVacation() {
     register,
     setValue,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<UploadForm>({
     resolver: joiResolver(validationSchema),
     defaultValues: { startDate: null, endDate: null },
   });
 
+  const { handleUpload } = useContext(AuthContext)!;
+
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [dateError, setDateError] = useState(false);
+  const [successAlert, setSuccessAlert] = useState({
+    message: "",
+    open: false,
+  });
 
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
-      setImagePreview(URL.createObjectURL(file)); // Set the image preview
-      setValue("image", file, { shouldValidate: true }); // Set the file to the form state
+      setImagePreview(URL.createObjectURL(file));
+      setValue("image", file, { shouldValidate: true });
     }
   };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    multiple: false, // Ensure only one file is allowed
+    multiple: false,
     accept: {
-      "image/*": [], // Restrict to images only
+      "image/*": [],
     },
   });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
+  const onSubmit: SubmitHandler<UploadForm> = async (data) => {
     if (dayjs(data.startDate).isBefore(data.endDate)) {
-      console.log(data);
       setDateError(false);
+      handleUpload(data);
+      setSuccessAlert({
+        message: "Successfully uploaded vacation",
+        open: true,
+      });
+      reset();
     } else {
+      setSuccessAlert({ message: "", open: false });
       setDateError(true);
     }
   };
@@ -129,6 +136,13 @@ export default function AddVacation() {
         boxShadow: 3,
       }}
     >
+      <SuccessAlert
+        handleClose={() => {
+          setSuccessAlert({ message: "", open: false });
+        }}
+        message={successAlert.message}
+        open={successAlert.open}
+      />
       <Typography
         sx={{ textAlign: "center" }}
         color="primary"
@@ -191,7 +205,7 @@ export default function AddVacation() {
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  label="Start Date"
+                  label="End Date"
                   disablePast
                   {...field}
                   value={dayjs(field.value)}

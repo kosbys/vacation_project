@@ -13,11 +13,7 @@ import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
-
-interface FormData {
-  email: string;
-  password: string;
-}
+import { LoginForm } from "../types";
 
 const validationSchema = Joi.object({
   email: Joi.string()
@@ -41,11 +37,11 @@ export default function Login() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormData>({ resolver: joiResolver(validationSchema) });
+  } = useForm<LoginForm>({ resolver: joiResolver(validationSchema) });
   const navigate = useNavigate();
   const { user, handleLogin, error } = useContext(AuthContext)!;
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: LoginForm) => {
     const success = await handleLogin(data.email, data.password);
 
     if (!success) {

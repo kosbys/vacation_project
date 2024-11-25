@@ -1,32 +1,13 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-
-type RegisterForm = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
-
-export type User = {
-  id: number;
-  email: string;
-  role: "user" | "admin";
-  name: string;
-};
-
-type AuthContextType = {
-  user: User | null;
-  handleLogin: (email: string, password: string) => Promise<boolean>;
-  handleRegister: (form: RegisterForm) => Promise<boolean>;
-  handleLogout: () => void;
-  error: string | null;
-};
-
-type AuthProviderChildren = {
-  children: ReactNode;
-};
+import {
+  AuthContextType,
+  AuthProviderChildren,
+  User,
+  RegisterForm,
+  UploadForm,
+} from "../types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -81,6 +62,23 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       });
   };
 
+  const handleUpload = (form: UploadForm): Promise<boolean> => {
+    return axios
+      .post("/vacation", form, {
+        baseURL: "http://localhost:3000",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => {
+        return true;
+      })
+      .catch((err) => {
+        console.log(err);
+        return false;
+      });
+  };
+
   const handleLogout = () => {
     setToken(null);
     setUser(null);
@@ -89,7 +87,14 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, handleLogin, handleRegister, handleLogout, error }}
+      value={{
+        user,
+        handleLogin,
+        handleRegister,
+        handleLogout,
+        handleUpload,
+        error,
+      }}
     >
       {!loading && children}
     </AuthContext.Provider>

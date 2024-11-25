@@ -4,10 +4,10 @@ import mysql from "mysql2";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import formidable from "formidable";
+import formidable, { Fields, Files } from "formidable";
 import path from "path";
 import fs from "fs";
-import { User } from "./types";
+import { User, Vacation } from "./types";
 import { hashPassword, comparePasswords } from "./passwordHelpers";
 
 dotenv.config();
@@ -17,6 +17,7 @@ const PORT = process.env.PORT;
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   "a086241da7c28c774676bb9074bd49edfe709abef83efc5a457992e183693f70";
+const imageFolder = path.join(__dirname, "public");
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -34,7 +35,7 @@ db.connect((err) => {
 
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // check dupe email
 app.post("/register", (req: Request, res: Response): void => {
@@ -67,7 +68,12 @@ app.post("/register", (req: Request, res: Response): void => {
               const user: User = result[0];
 
               const token = jwt.sign(
-                { id: user.id, email: user.email, role: user.role },
+                {
+                  id: user.id,
+                  email: user.email,
+                  role: user.role,
+                  name: `${user.first_name} ${user.last_name}`,
+                },
                 JWT_SECRET,
                 {
                   expiresIn: "24h",
@@ -120,7 +126,12 @@ app.post("/login", (req: Request, res: Response): void => {
           }
 
           const token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role },
+            {
+              id: user.id,
+              email: user.email,
+              role: user.role,
+              name: `${user.first_name} ${user.last_name}`,
+            },
             JWT_SECRET,
             {
               expiresIn: "24h",
@@ -138,9 +149,38 @@ app.post("/login", (req: Request, res: Response): void => {
   );
 });
 
-app.post("/vacation", (req, res) => {
-  const { destination, description, startDate, endDate, price, image } =
-    req.body;
+// DO THIS
+app.post("/vacation", (req, res): void => {
+  const form = formidable({
+    multiples: false,
+    uploadDir: imageFolder,
+    keepExtensions: true,
+  });
+
+  form.parse(req, (err, fields: Fields, files: Files) => {
+    if (err) {
+      res.status(500).send(err);
+      return;
+    }
+
+    db.query(
+      `INSERT INTO vacations (destination, description, start_date, end_date, price, image_name) 
+      VALUES
+      ("${fields.destination}", "${fields.description}", "${
+        new Date(fields.startDate![0]).toISOString().split("T")[0]
+      }",
+       "${new Date(fields.endDate![0]).toISOString().split("T")[0]}",
+        "${fields.price}", "${files!.image![0].originalFilename}")`,
+      (err) => {
+        if (err) {
+          res.status(500).json({ message: "DB error", error: err });
+          return;
+        }
+      }
+    );
+
+    res.status(200).send({ fields, files });
+  });
 });
 
 app.put("/vacation", (req, res) => {});
