@@ -12,10 +12,10 @@ type Vacation = {
   id: number;
   destination: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  start_date: Date;
+  end_date: Date;
   price: number;
-  filename: string;
+  image_name: string;
 };
 
 type RegisterForm = {

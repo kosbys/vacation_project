@@ -35,7 +35,7 @@ db.connect((err) => {
 
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 // check dupe email
 app.post("/register", (req: Request, res: Response): void => {
