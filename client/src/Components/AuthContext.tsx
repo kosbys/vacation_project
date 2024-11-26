@@ -26,6 +26,49 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
     setLoading(false);
   }, [token]);
 
+  const getVacations = () => {
+    return axios
+      .get("/vacations", { baseURL: "http://localhost:3000" })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        console.error(err);
+        return [];
+      });
+  };
+
+  const checkFollowingNumber = (vacation_id: number): Promise<number> => {
+    return axios
+      .get("/following_number", {
+        baseURL: "http://localhost:3000",
+        params: { vacation_id },
+      })
+      .then((res) => {
+        return res.data.length;
+      })
+      .catch(() => {
+        return 0;
+      });
+  };
+
+  const checkFollowing = (
+    user_id: number,
+    vacation_id: number
+  ): Promise<boolean> => {
+    return axios
+      .get("/following", {
+        baseURL: "http://localhost:3000",
+        params: { user_id, vacation_id },
+      })
+      .then((res) => {
+        return res.data.length;
+      })
+      .catch(() => {
+        return 0;
+      });
+  };
+
   const handleLogin = (email: string, password: string): Promise<boolean> => {
     return axios
       .post(
@@ -61,6 +104,37 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
         return false;
       });
   };
+  const handleFollow = (vacation_id: number): Promise<boolean> => {
+    return axios
+      .post(
+        "/follow",
+        {
+          user_id: user?.id,
+          vacation_id,
+        },
+        { baseURL: "http://localhost:3000" }
+      )
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
+  };
+
+  const handleUnFollow = (vacation_id: number): Promise<boolean> => {
+    return axios
+      .delete("/unfollow", {
+        baseURL: "http://localhost:3000",
+        data: { user_id: user?.id, vacation_id },
+      })
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
+  };
 
   const handleUpload = (form: UploadForm): Promise<boolean> => {
     return axios
@@ -89,8 +163,13 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
     <AuthContext.Provider
       value={{
         user,
+        getVacations,
+        checkFollowing,
+        checkFollowingNumber,
         handleLogin,
         handleRegister,
+        handleFollow,
+        handleUnFollow,
         handleLogout,
         handleUpload,
         error,

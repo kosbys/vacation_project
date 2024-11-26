@@ -1,46 +1,27 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
-import VacationCard from "./Vacation";
-import axios from "axios";
-import { Vacation } from "../types";
 import { Stack } from "@mui/material";
-
-const createVacations = async (role: "user" | "admin") => {
-  return axios
-    .get("/vacations", { baseURL: "http://localhost:3000" })
-    .then((res) => {
-      return res.data.map((vacation: Vacation) => {
-        return (
-          <VacationCard
-            key={vacation.id}
-            role={role}
-            vacation={vacation}
-          ></VacationCard>
-        );
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      return [];
-    });
-};
+import { Vacation } from "../types";
+import VacationCard from "./VacationCard";
 
 export default function Vacations() {
-  const { user } = useContext(AuthContext)!;
-  const [vacations, setVacations] = useState<JSX.Element[]>([]);
+  const { getVacations } = useContext(AuthContext)!;
+  const [vacations, setVacations] = useState<Vacation[]>([]);
 
   useEffect(() => {
     const fetchVacations = async () => {
-      const vacations = await createVacations(user!.role);
-      setVacations(vacations);
+      const fetched = await getVacations();
+      setVacations(fetched);
     };
 
     fetchVacations();
-  }, [user]);
+  }, []);
 
   return (
     <Stack direction="row" spacing={2} padding={3}>
-      {vacations}
+      {vacations.map((vacation) => (
+        <VacationCard key={vacation.id} vacation={vacation} />
+      ))}
     </Stack>
   );
 }

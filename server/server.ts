@@ -170,7 +170,7 @@ app.post("/vacation", (req, res): void => {
 
   form.parse(req, (err, fields: Fields, files: Files) => {
     if (err) {
-      res.status(500).send(err);
+      res.status(500).json({ message: "Form parse error", error: err });
       return;
     }
 
@@ -190,13 +190,66 @@ app.post("/vacation", (req, res): void => {
       }
     );
 
-    res.status(200).send({ fields, files });
+    res.status(200).json({ fields, files });
   });
 });
 
 app.put("/vacation", (req, res) => {});
 
-app.get("/vacations", (req, res) => {});
+app.post("/follow", (req, res) => {
+  db.query(
+    `INSERT INTO follows (user_id, vacation_id) VALUES (${req.body.user_id}, ${req.body.vacation_id})`,
+    (err) => {
+      if (err) {
+        res.status(500).json({ message: "DB error", error: err });
+      }
+    }
+  );
+
+  res.status(200).send({ message: "Follow success" });
+});
+
+app.get("/following", (req, res) => {
+  db.query(
+    `SELECT * FROM follows WHERE (user_id, vacation_id) = (${req.query.user_id} ,${req.query.vacation_id})`,
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ message: "DB error", error: err });
+        return;
+      }
+
+      res.status(200).json(results);
+    }
+  );
+});
+
+app.get("/following_number", (req, res) => {
+  db.query(
+    `SELECT * FROM follows WHERE (vacation_id) = (${req.query.vacation_id})`,
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ message: "DB error", error: err });
+        return;
+      }
+
+      res.status(200).json(results);
+    }
+  );
+});
+
+app.delete("/unfollow", (req, res) => {
+  db.query(
+    `DELETE FROM follows WHERE (user_id, vacation_id) = (${req.body.user_id}, ${req.body.vacation_id})`,
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ message: "DB error", error: err });
+        return;
+      }
+
+      res.status(200).json(results);
+    }
+  );
+});
 
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);

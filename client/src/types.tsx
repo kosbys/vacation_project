@@ -41,8 +41,13 @@ type LoginForm = {
 
 type AuthContextType = {
   user: User | null;
+  getVacations: () => Promise<Vacation[]>;
+  checkFollowing: (user_id: number, vacation_id: number) => Promise<boolean>;
+  checkFollowingNumber: (vacation_id: number) => Promise<number>;
   handleLogin: (email: string, password: string) => Promise<boolean>;
   handleRegister: (form: RegisterForm) => Promise<boolean>;
+  handleFollow: (vacation_id: number) => Promise<boolean>;
+  handleUnFollow: (vacation_id: number) => Promise<boolean>;
   handleUpload: (form: UploadForm) => Promise<boolean>;
   handleLogout: () => void;
   error: string | null;

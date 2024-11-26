@@ -13,14 +13,14 @@ import VacationReport from "./Components/Report.tsx";
 const ProtectedRoute: React.FC<{ element: JSX.Element }> = ({ element }) => {
   const { user } = useContext(AuthContext)!;
 
-  return user ? element : <Navigate to="/register" />;
+  return user ? element : <Navigate to="/login" />;
 };
 
 const AdminRoute: React.FC<{ element: JSX.Element }> = ({ element }) => {
   const { user } = useContext(AuthContext)!;
 
   if (user == null) {
-    return <Navigate to="/register" />;
+    return <Navigate to="/login" />;
   }
 
   if (user.role === "admin") {
