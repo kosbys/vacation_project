@@ -152,7 +152,7 @@ app.post("/login", (req: Request, res: Response): void => {
 });
 
 app.get("/vacations", (req, res): void => {
-  db.query("SELECT * FROM vacations", (err, results) => {
+  db.query("SELECT * FROM vacations ORDER BY start_date", (err, results) => {
     if (err) {
       res.status(500).json({ error: err });
       return;
