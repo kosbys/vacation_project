@@ -59,11 +59,18 @@ type AuthProviderChildren = {
   children: ReactNode;
 };
 
+type Filters = {
+  followed: boolean;
+  upcoming: boolean;
+  current: boolean;
+};
+
 export type {
   User,
   Vacation,
   RegisterForm,
   UploadForm,
+  Filters,
   LoginForm,
   AuthContextType,
   AuthProviderChildren,

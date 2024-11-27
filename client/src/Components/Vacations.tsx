@@ -1,29 +1,61 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { Pagination, Stack } from "@mui/material";
-import { Vacation } from "../types";
+import { Filters, Vacation } from "../types";
 import VacationCard from "./VacationCard";
 import VacationFilters from "./VacationFilters";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
 
 export default function Vacations() {
   const { getVacations, checkFollowing, user } = useContext(AuthContext)!;
   const [vacations, setVacations] = useState<Vacation[]>([]);
   const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState<Filters>({
+    followed: false,
+    upcoming: false,
+    current: false,
+  });
 
   useEffect(() => {
-    const fetchVacations = async () => {
+    const fetchAndFilterVacations = async () => {
       const fetched = await getVacations();
-      const followed = await Promise.all(
+      const vacationsFull = await Promise.all(
         fetched.map(async (vacation: Vacation) => {
           const following = await checkFollowing(user!.id, vacation.id);
           return { ...vacation, following };
         })
       );
-      setVacations(followed);
+
+      const filteredVacations = vacationsFull.filter((vacation) => {
+        if (filters.followed && !vacation.following) {
+          console.log("Unfollowed vacation", vacation);
+
+          return false;
+        }
+
+        if (filters.upcoming) {
+          return dayjs(vacation.start_date).isAfter(dayjs());
+        }
+
+        if (filters.current) {
+          return dayjs().isBetween(
+            dayjs(vacation.start_date),
+            dayjs(vacation.end_date)
+          );
+        }
+
+        console.log("All good");
+
+        return true;
+      });
+
+      setVacations(filteredVacations);
+      setPage(1);
     };
 
-    fetchVacations();
-  }, [user]);
+    fetchAndFilterVacations();
+  }, [filters]);
 
   const changePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -32,9 +64,13 @@ export default function Vacations() {
   const startIndex = (page - 1) * 10;
   const currentVacations = vacations.slice(startIndex, startIndex + 10);
 
+  const filterToggleClick = (newFilters: Filters) => {
+    setFilters(newFilters);
+  };
+
   return (
     <Stack direction="column">
-      <VacationFilters />
+      <VacationFilters filters={filters} onToggle={filterToggleClick} />
       <Stack
         direction="row"
         justifyContent="center"

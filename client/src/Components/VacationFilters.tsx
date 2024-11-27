@@ -1,32 +1,50 @@
-import { Box, FormControlLabel, Switch, Typography } from "@mui/material";
+import { Box, FormControlLabel, Switch } from "@mui/material";
+import { Filters } from "../types";
+import React from "react";
 
-type Filters = {
-  followed: boolean;
-  upcoming: boolean;
-  current: boolean;
-};
+export default function VacationFilters({
+  filters,
+  onToggle,
+}: {
+  filters: Filters;
+  onToggle: (Filters: Filters) => void;
+}) {
+  const handleToggle = (filterType: string) => {
+    return (_e: React.SyntheticEvent, checked: boolean): void => {
+      const newFilters = { ...filters, [filterType]: checked };
 
-// DO THIS DO THIS DO THIS
-// Switch that filters only followed vacations
-// Switch that filters only vacations that haven't begun (date compare)
-// Switch that filters only vacations that are happening right now (date range)
-export default function VacationFilters() {
+      if (filterType === "upcoming" && checked) {
+        newFilters.current = false;
+      } else if (filterType === "current" && checked) {
+        newFilters.upcoming = false;
+      }
+
+      onToggle(newFilters);
+    };
+  };
+
   return (
     <Box alignSelf="center" display="flex" gap={2} padding={1}>
       <FormControlLabel
         labelPlacement="bottom"
+        checked={filters.followed}
+        onChange={handleToggle("followed")}
         control={<Switch />}
         label="Followed"
       />
       <FormControlLabel
         labelPlacement="bottom"
+        checked={filters.current}
         control={<Switch />}
-        label="Future"
+        onChange={handleToggle("current")}
+        label="Ongoing"
       />
       <FormControlLabel
         labelPlacement="bottom"
+        checked={filters.upcoming}
         control={<Switch />}
-        label="Ongoing"
+        onChange={handleToggle("upcoming")}
+        label="Future"
       />
     </Box>
   );

@@ -61,10 +61,10 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
         params: { user_id, vacation_id },
       })
       .then((res) => {
-        return res.data.length;
+        return res.data.length > 0;
       })
       .catch(() => {
-        return 0;
+        return false;
       });
   };
 
