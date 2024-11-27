@@ -38,9 +38,6 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
     checkFollowingNumber(vacation.id).then((res) => {
       setFollowingNumber(res);
     });
-  }, []);
-
-  useEffect(() => {
     checkFollowing(user!.id, vacation.id).then((res) => {
       setFollowing(res);
     });
@@ -58,7 +55,7 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
               <Chip
                 label={following ? "Following" : "Not following"}
                 sx={{ placeSelf: "end" }}
-                variant="outlined"
+                variant={following ? "filled" : "outlined"}
                 color="primary"
               />
             ) : (
@@ -90,7 +87,7 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
                 <FavoriteIcon />
               </Badge>
             ) : (
-              <Badge color="primary" badgeContent={1}>
+              <Badge color="primary" badgeContent={followingNumber}>
                 <FavoriteIcon />
               </Badge>
             )}

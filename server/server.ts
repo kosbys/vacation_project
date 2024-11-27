@@ -20,7 +20,8 @@ const JWT_SECRET =
 const imageFolder = path.join(__dirname, "public");
 
 const db = mysql.createConnection({
-  host: "localhost",
+  host: "db",
+  port: 3306,
   user: "root",
   database: "vacation_app",
 });
