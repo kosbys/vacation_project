@@ -11,7 +11,7 @@ import {
 import { Navigate, Link as RouterLink, useNavigate } from "react-router-dom";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import { RegisterForm } from "../types";
 
@@ -50,7 +50,11 @@ export default function Register() {
   } = useForm<RegisterForm>({ resolver: joiResolver(validationSchema) });
   const navigate = useNavigate();
 
-  const { user, handleRegister, error } = useContext(AuthContext)!;
+  const { user, handleRegister, error, setError } = useContext(AuthContext)!;
+
+  useEffect(() => {
+    setError(null);
+  }, [setError]);
 
   const onSubmit = async (data: RegisterForm) => {
     handleRegister(data);

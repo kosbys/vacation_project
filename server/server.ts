@@ -6,8 +6,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import formidable, { Fields, Files } from "formidable";
 import path from "path";
-import fs from "fs";
-import { User, Vacation } from "./types";
+import { User } from "./types";
 import { hashPassword, comparePasswords } from "./passwordHelpers";
 
 dotenv.config();
@@ -20,7 +19,7 @@ const JWT_SECRET =
 const imageFolder = path.join(__dirname, "public");
 
 const db = mysql.createConnection({
-  host: "db",
+  host: "db", // "db" for docker otherwise "localhost"
   port: 3306,
   user: "root",
   database: "vacation_app",

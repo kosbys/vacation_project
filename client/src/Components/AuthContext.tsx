@@ -25,7 +25,6 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
     }
     setLoading(false);
   }, [token]);
-
   const getVacations = () => {
     return axios
       .get("/vacations", { baseURL: "http://localhost:3000" })
@@ -81,10 +80,12 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       .then((res) => {
         setToken(res.data.token);
         localStorage.setItem("token", res.data.token);
+        setError(null);
         return true;
       })
       .catch((err) => {
         setError(err.response.data.message);
+
         return false;
       });
   };
@@ -97,6 +98,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       .then((res) => {
         setToken(res.data.token);
         localStorage.setItem("token", res.data.token);
+        setError(null);
         return true;
       })
       .catch((err) => {
@@ -164,6 +166,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       value={{
         user,
         getVacations,
+        setError,
         checkFollowing,
         checkFollowingNumber,
         handleLogin,

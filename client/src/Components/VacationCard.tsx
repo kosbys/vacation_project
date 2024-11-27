@@ -16,6 +16,7 @@ import { red } from "@mui/material/colors";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 
+// pagination
 export default function VacationCard({ vacation }: { vacation: Vacation }) {
   const {
     user,

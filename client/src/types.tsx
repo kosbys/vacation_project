@@ -42,6 +42,7 @@ type LoginForm = {
 type AuthContextType = {
   user: User | null;
   getVacations: () => Promise<Vacation[]>;
+  setError: React.Dispatch<React.SetStateAction<string | null>>;
   checkFollowing: (user_id: number, vacation_id: number) => Promise<boolean>;
   checkFollowingNumber: (vacation_id: number) => Promise<number>;
   handleLogin: (email: string, password: string) => Promise<boolean>;
