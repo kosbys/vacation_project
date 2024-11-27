@@ -55,7 +55,7 @@ export default function Register() {
   const onSubmit = async (data: RegisterForm) => {
     handleRegister(data);
     if (error) {
-      reset();
+      reset({}, { keepErrors: false });
     } else {
       navigate("/vacations");
     }
