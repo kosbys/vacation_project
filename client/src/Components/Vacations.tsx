@@ -7,6 +7,7 @@ import VacationFilters from "./VacationFilters";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 
+// ADD WAY TO EDIT AND DELETE VACATION AS ADMIN
 export default function Vacations() {
   const { getVacations, checkFollowing, user } = useContext(AuthContext)!;
   const [vacations, setVacations] = useState<Vacation[]>([]);
@@ -29,8 +30,6 @@ export default function Vacations() {
 
       const filteredVacations = vacationsFull.filter((vacation) => {
         if (filters.followed && !vacation.following) {
-          console.log("Unfollowed vacation", vacation);
-
           return false;
         }
 
@@ -44,8 +43,6 @@ export default function Vacations() {
             dayjs(vacation.end_date)
           );
         }
-
-        console.log("All good");
 
         return true;
       });
