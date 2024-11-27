@@ -20,13 +20,15 @@ import { AuthContext } from "./AuthContext";
 import SuccessAlert from "./SuccessAlert";
 
 const validationSchema = Joi.object({
-  destination: Joi.string().required().messages({
+  destination: Joi.string().required().max(255).messages({
     "string.empty": "Please enter a destination",
+    "string.max": "Destination too long",
     "string.email": "Please enter a destination",
     "any.required": "Destination is required",
   }),
-  description: Joi.string().required().messages({
+  description: Joi.string().required().max(255).messages({
     "string.empty": "Please enter a description",
+    "string.max": "Description too long",
     "any.required": "Description is required",
   }),
   startDate: Joi.custom((value, helpers) => {

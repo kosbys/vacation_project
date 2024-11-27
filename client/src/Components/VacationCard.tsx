@@ -16,7 +16,6 @@ import { red } from "@mui/material/colors";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 
-// pagination
 export default function VacationCard({ vacation }: { vacation: Vacation }) {
   const {
     user,
@@ -45,7 +44,7 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
   }, []);
 
   return (
-    <Card sx={{ maxWidth: 400 }}>
+    <Card sx={{ width: 300 }}>
       <CardHeader
         title={
           <Stack direction="row">
@@ -99,7 +98,8 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
         component="img"
         image={`http://localhost:3000/public/${vacation.image_name}`}
         alt={vacation.destination}
-        sx={{ maxHeight: 500 }}
+        height={200}
+        width={200}
       />
       <CardContent sx={{ padding: "10px" }}>
         <Stack>
