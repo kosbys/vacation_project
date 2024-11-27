@@ -73,7 +73,8 @@ app.post("/register", (req: Request, res: Response): void => {
                   id: user.id,
                   email: user.email,
                   role: user.role,
-                  name: `${user.first_name} ${user.last_name}`,
+                  firstName: user.first_name,
+                  lastName: user.last_name,
                 },
                 JWT_SECRET,
                 {

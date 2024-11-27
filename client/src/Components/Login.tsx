@@ -45,7 +45,7 @@ export default function Login() {
     const success = await handleLogin(data.email, data.password);
 
     if (!success) {
-      reset();
+      reset({}, { keepErrors: false });
     } else {
       navigate("/vacations");
     }
