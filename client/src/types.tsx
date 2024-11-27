@@ -16,6 +16,7 @@ type Vacation = {
   end_date: Date;
   price: number;
   image_name: string;
+  following: boolean;
 };
 
 type RegisterForm = {

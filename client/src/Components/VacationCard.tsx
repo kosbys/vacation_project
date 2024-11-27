@@ -24,7 +24,6 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
     checkFollowing,
     checkFollowingNumber,
   } = useContext(AuthContext)!;
-  const [following, setFollowing] = useState<boolean>(false);
   const [followingNumber, setFollowingNumber] = useState<number>(0);
 
   const role = user?.role;
@@ -39,12 +38,12 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
       setFollowingNumber(res);
     });
     checkFollowing(user!.id, vacation.id).then((res) => {
-      setFollowing(res);
+      vacation.following = res;
     });
   }, []);
 
   return (
-    <Card sx={{ width: 300 }}>
+    <Card sx={{ width: 400 }}>
       <CardHeader
         title={
           <Stack direction="row">
@@ -53,9 +52,9 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
             </Typography>
             {role === "user" ? (
               <Chip
-                label={following ? "Following" : "Not following"}
+                label={vacation.following ? "Following" : "Not following"}
                 sx={{ placeSelf: "end" }}
-                variant={following ? "filled" : "outlined"}
+                variant={vacation.following ? "filled" : "outlined"}
                 color="primary"
               />
             ) : (
@@ -72,7 +71,7 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
             {role === "user" ? (
               <Badge
                 sx={
-                  following
+                  vacation.following
                     ? {
                         "& .MuiBadge-badge": {
                           backgroundColor: "red",
@@ -148,22 +147,22 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
           <Stack>
             <Button
               onClick={async () => {
-                if (following) {
+                if (vacation.following) {
                   await handleUnFollow(vacation.id).then(() => {
-                    setFollowing(false);
+                    vacation.following = false;
                     setFollowingNumber((prev) => prev - 1);
                   });
                 } else {
                   await handleFollow(vacation.id).then(() => {
-                    setFollowing(true);
+                    vacation.following = true;
                     setFollowingNumber((prev) => prev + 1);
                   });
                 }
               }}
-              variant={following ? "outlined" : "contained"}
+              variant={vacation.following ? "outlined" : "contained"}
               aria-label="follow"
             >
-              {following ? (
+              {vacation.following ? (
                 <FavoriteBorderOutlinedIcon
                   htmlColor={red[500]}
                   sx={{ paddingRight: "5px" }}
@@ -174,7 +173,7 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
                   sx={{ paddingRight: "5px" }}
                 />
               )}
-              {following ? "Unfollow" : "Follow"}
+              {vacation.following ? "Unfollow" : "Follow"}
             </Button>
           </Stack>
         )}
