@@ -195,7 +195,10 @@ app.post("/vacation", (req, res): void => {
   });
 });
 
-app.put("/vacation", (req, res) => {});
+app.put("/vacation", (req, res) => {
+  console.log(req.query);
+  console.log(req.body);
+});
 
 app.post("/follow", (req, res) => {
   db.query(

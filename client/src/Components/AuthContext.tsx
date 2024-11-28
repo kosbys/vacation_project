@@ -7,7 +7,6 @@ import {
   User,
   RegisterForm,
   VacationForm,
-  Vacation,
 } from "../types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -160,7 +159,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
     return axios
       .delete("/vacation", {
         data: { vacation_id },
-        baseURL: "http://localhost:300",
+        baseURL: "http://localhost:3000",
       })
       .then(() => {
         return true;
@@ -175,8 +174,15 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
   const handleEdit = (
     form: VacationForm,
     vacation_id: number
-  ): Promise<Vacation> => {
-    return axios.put(`/vacation/${vacation_id}`, form);
+  ): Promise<boolean> => {
+    return axios
+      .put(`/vacation/${vacation_id}`, form)
+      .then(() => {
+        return true;
+      })
+      .catch(() => {
+        return false;
+      });
   };
 
   const handleLogout = () => {
