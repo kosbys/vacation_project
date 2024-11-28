@@ -174,8 +174,6 @@ app.post("/vacation", (req, res): void => {
       return;
     }
 
-    console.log(files);
-
     db.query(
       `INSERT INTO vacations (destination, description, start_date, end_date, price, image_name) 
       VALUES
@@ -199,20 +197,21 @@ app.post("/vacation", (req, res): void => {
 // investigate if this works
 app.put("/vacation/:id", (req, res) => {
   if (req.headers["content-type"] === "application/json") {
+    const formattedDates = {
+      startDate: new Date(req.body.startDate).toISOString().split("T")[0],
+      endDate: new Date(req.body.endDate).toISOString().split("T")[0],
+    };
+
     db.query(
-      `UPDATE vacations set destination = '${
-        req.body.destination
-      }', description = '${req.body.description}', start_date = '${
-        new Date(req.body.startDate![0]).toISOString().split("T")[0]
-      }',end_date = '${
-        new Date(req.body.endDate![0]).toISOString().split("T")[0]
-      }', price = ${req.body.price}
+      `UPDATE vacations set destination = '${req.body.destination}', description = '${req.body.description}', start_date = '${formattedDates.startDate}',end_date = '${formattedDates.endDate}', price = ${req.body.price}
         WHERE vacations.id = ${req.params.id}`,
       (err) => {
         if (err) {
           res.status(500).json({ message: "DB error", error: err });
           return;
         }
+        res.status(200).json({ message: "Edit success" });
+        return;
       }
     );
   } else {
@@ -248,41 +247,6 @@ app.put("/vacation/:id", (req, res) => {
       );
     });
   }
-
-  res.status(200).json({ message: "Edit success" });
-
-  // const form = formidable({
-  //   multiples: false,
-  //   uploadDir: imageFolder,
-  //   keepExtensions: true,
-  // });
-
-  // form.parse(req, (err, fields: Fields, files: Files) => {
-  //   if (err) {
-  //     res.status(500).json({ message: "Form parse error", error: err });
-  //     return;
-  //   }
-
-  //   db.query(
-  //     `UPDATE vacations set destination = '${
-  //       fields.destination
-  //     }', description = '${fields.description}', start_date = '${
-  //       new Date(fields.startDate![0]).toISOString().split("T")[0]
-  //     }',end_date = '${
-  //       new Date(fields.endDate![0]).toISOString().split("T")[0]
-  //     }', price = ${fields.price}, image_name = '${files.image![0].newFilename}'
-  //       WHERE vacations.id = ${req.params.id}`,
-  //     (err, result) => {
-  //       if (err) {
-  //         res.status(500).json({ message: "DB error", error: err });
-  //         return;
-  //       }
-  //       console.log(result);
-  //     }
-  //   );
-
-  //   res.status(200).json({ message: "Edit success" });
-  // });
 });
 
 app.delete("/vacation", (req, res) => {
