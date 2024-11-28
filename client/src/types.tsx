@@ -26,7 +26,7 @@ type RegisterForm = {
   password: string;
 };
 
-type UploadForm = {
+type VacationForm = {
   destination: string;
   description: string;
   startDate: Date | null;
@@ -50,8 +50,11 @@ type AuthContextType = {
   handleRegister: (form: RegisterForm) => Promise<boolean>;
   handleFollow: (vacation_id: number) => Promise<boolean>;
   handleUnFollow: (vacation_id: number) => Promise<boolean>;
-  handleUpload: (form: UploadForm) => Promise<boolean>;
+  handleUpload: (form: VacationForm) => Promise<boolean>;
+  handleDelete: (vacation_id: number) => Promise<boolean>;
+  handleEdit: (form: VacationForm, vacation_id: number) => Promise<boolean>;
   handleLogout: () => void;
+
   error: string | null;
 };
 
@@ -69,7 +72,7 @@ export type {
   User,
   Vacation,
   RegisterForm,
-  UploadForm,
+  VacationForm,
   Filters,
   LoginForm,
   AuthContextType,

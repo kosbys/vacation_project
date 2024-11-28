@@ -13,8 +13,10 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useLocation } from "react-router";
+import { AuthContext } from "./AuthContext";
 
 interface FormData {
   destination: string;
@@ -37,7 +39,7 @@ const validationSchema = Joi.object({
   }),
   startDate: Joi.custom((value, helpers) => {
     if (!dayjs.isDayjs(value)) {
-      return helpers.error("any.invalid");
+      value = dayjs(value);
     }
     if (!value.isValid()) {
       return helpers.error("date.invalid");
@@ -52,8 +54,9 @@ const validationSchema = Joi.object({
     }),
   endDate: Joi.custom((value, helpers) => {
     if (!dayjs.isDayjs(value)) {
-      return helpers.error("any.invalid");
+      value = dayjs(value);
     }
+
     if (!value.isValid()) {
       return helpers.error("date.invalid");
     }
@@ -77,6 +80,7 @@ const validationSchema = Joi.object({
 });
 
 export default function EditVacation() {
+  const { state } = useLocation();
   const {
     control,
     register,
@@ -85,10 +89,17 @@ export default function EditVacation() {
     formState: { errors },
   } = useForm<FormData>({
     resolver: joiResolver(validationSchema),
-    defaultValues: { startDate: null, endDate: null },
+    defaultValues: {
+      startDate: dayjs(state.start_date).toDate(),
+      endDate: dayjs(state.end_date).toDate(),
+    },
   });
 
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const { handleEdit } = useContext(AuthContext)!;
+
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    `http://localhost:3000/public/${state.image_name}`
+  );
   const [dateError, setDateError] = useState(false);
 
   const onDrop = (acceptedFiles: File[]) => {
@@ -109,8 +120,7 @@ export default function EditVacation() {
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (dayjs(data.startDate).isBefore(data.endDate)) {
-      console.log(data);
-      setDateError(false);
+      handleEdit(data, state.id);
     } else {
       setDateError(true);
     }
@@ -147,6 +157,7 @@ export default function EditVacation() {
             error={!!errors.destination}
             helperText={errors.destination?.message}
             required
+            defaultValue={state.destination}
           />
 
           <TextField
@@ -158,6 +169,7 @@ export default function EditVacation() {
             {...register("description")}
             error={!!errors.description}
             helperText={errors.description?.message}
+            defaultValue={state.description}
             required
           />
 
@@ -167,7 +179,6 @@ export default function EditVacation() {
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  disablePast
                   label="Start Date"
                   {...field}
                   value={dayjs(field.value)}
@@ -185,12 +196,12 @@ export default function EditVacation() {
 
           <Controller
             name="endDate"
+            defaultValue={dayjs(state.end_date).toDate()}
             control={control}
             render={({ field }) => (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  label="Start Date"
-                  disablePast
+                  label="End Date"
                   {...field}
                   value={dayjs(field.value)}
                   onChange={(newValue) => field.onChange(newValue)}
@@ -207,6 +218,7 @@ export default function EditVacation() {
 
           <TextField
             label="Price"
+            defaultValue={state.price}
             variant="outlined"
             fullWidth
             type="text"

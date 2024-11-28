@@ -15,16 +15,20 @@ import { Badge, Button, Chip, Stack } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
+import { useNavigate } from "react-router";
 
+// DELETE AND EDIT FOR ADMIN
 export default function VacationCard({ vacation }: { vacation: Vacation }) {
   const {
     user,
     handleFollow,
     handleUnFollow,
+    handleDelete,
     checkFollowing,
     checkFollowingNumber,
   } = useContext(AuthContext)!;
   const [followingNumber, setFollowingNumber] = useState<number>(0);
+  const navigate = useNavigate();
 
   const role = user?.role;
 
@@ -43,7 +47,7 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
   }, []);
 
   return (
-    <Card sx={{ width: 400 }}>
+    <Card sx={{ width: 400, maxHeight: 600 }}>
       <CardHeader
         title={
           <Stack direction="row">
@@ -128,15 +132,15 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
           <>
             <IconButton
               onClick={() => {
-                console.log("edit");
+                navigate("/editvacation", { state: vacation });
               }}
               aria-label="edit"
             >
               <EditIcon />
             </IconButton>
             <IconButton
-              onClick={() => {
-                console.log("delete");
+              onClick={async () => {
+                handleDelete(vacation.id);
               }}
               aria-label="delete"
             >

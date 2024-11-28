@@ -15,7 +15,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { UploadForm } from "../types";
+import { VacationForm } from "../types";
 import { AuthContext } from "./AuthContext";
 import SuccessAlert from "./SuccessAlert";
 
@@ -82,7 +82,7 @@ export default function AddVacation() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<UploadForm>({
+  } = useForm<VacationForm>({
     resolver: joiResolver(validationSchema),
     defaultValues: { startDate: null, endDate: null },
   });
@@ -112,7 +112,7 @@ export default function AddVacation() {
     },
   });
 
-  const onSubmit: SubmitHandler<UploadForm> = async (data) => {
+  const onSubmit: SubmitHandler<VacationForm> = async (data) => {
     if (dayjs(data.startDate).isBefore(data.endDate)) {
       setDateError(false);
       handleUpload(data);

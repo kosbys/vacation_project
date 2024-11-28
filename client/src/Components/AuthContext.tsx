@@ -6,7 +6,8 @@ import {
   AuthProviderChildren,
   User,
   RegisterForm,
-  UploadForm,
+  VacationForm,
+  Vacation,
 } from "../types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -138,7 +139,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       });
   };
 
-  const handleUpload = (form: UploadForm): Promise<boolean> => {
+  const handleUpload = (form: VacationForm): Promise<boolean> => {
     return axios
       .post("/vacation", form, {
         baseURL: "http://localhost:3000",
@@ -153,6 +154,29 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
         console.log(err);
         return false;
       });
+  };
+
+  const handleDelete = (vacation_id: number): Promise<boolean> => {
+    return axios
+      .delete("/vacation", {
+        data: { vacation_id },
+        baseURL: "http://localhost:300",
+      })
+      .then(() => {
+        return true;
+      })
+      .catch((err) => {
+        console.log(err);
+        return false;
+      });
+  };
+
+  // TODO
+  const handleEdit = (
+    form: VacationForm,
+    vacation_id: number
+  ): Promise<Vacation> => {
+    return axios.put(`/vacation/${vacation_id}`, form);
   };
 
   const handleLogout = () => {
@@ -175,6 +199,8 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
         handleUnFollow,
         handleLogout,
         handleUpload,
+        handleDelete,
+        handleEdit,
         error,
       }}
     >
