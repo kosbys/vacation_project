@@ -52,7 +52,11 @@ type AuthContextType = {
   handleUnFollow: (vacation_id: number) => Promise<boolean>;
   handleUpload: (form: VacationForm) => Promise<boolean>;
   handleDelete: (vacation_id: number) => Promise<boolean>;
-  handleEdit: (form: VacationForm, vacation_id: number) => Promise<boolean>;
+  handleEdit: (
+    form: VacationForm,
+    vacation_id: number,
+    imageEdited: boolean
+  ) => Promise<boolean>;
   handleLogout: () => void;
 
   error: string | null;

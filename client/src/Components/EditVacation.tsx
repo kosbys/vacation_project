@@ -15,7 +15,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { AuthContext } from "./AuthContext";
 
 interface FormData {
@@ -81,6 +81,7 @@ const validationSchema = Joi.object({
 
 export default function EditVacation() {
   const { state } = useLocation();
+
   const {
     control,
     register,
@@ -94,6 +95,7 @@ export default function EditVacation() {
       endDate: dayjs(state.end_date).toDate(),
     },
   });
+  const navigate = useNavigate();
 
   const { handleEdit } = useContext(AuthContext)!;
 
@@ -101,26 +103,29 @@ export default function EditVacation() {
     `http://localhost:3000/public/${state.image_name}`
   );
   const [dateError, setDateError] = useState(false);
+  const [imageEdited, setImageEdited] = useState(false);
 
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
-      setImagePreview(URL.createObjectURL(file)); // Set the image preview
-      setValue("image", file, { shouldValidate: true }); // Set the file to the form state
+      setImagePreview(URL.createObjectURL(file));
+      setValue("image", file, { shouldValidate: true });
+      setImageEdited(true);
     }
   };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    multiple: false, // Ensure only one file is allowed
+    multiple: false,
     accept: {
-      "image/*": [], // Restrict to images only
+      "image/*": [],
     },
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (dayjs(data.startDate).isBefore(data.endDate)) {
-      handleEdit(data, state.id);
+      handleEdit(data, state.id, imageEdited);
+      navigate("/vacations");
     } else {
       setDateError(true);
     }
@@ -283,7 +288,9 @@ export default function EditVacation() {
               <input
                 type="hidden"
                 {...field}
-                value={field.value ? (field.value as File).name : ""}
+                value={
+                  field.value ? (field.value as File).name : state.image_name
+                }
               />
             )}
           />

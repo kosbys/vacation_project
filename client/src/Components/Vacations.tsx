@@ -17,40 +17,40 @@ export default function Vacations() {
     current: false,
   });
 
+  const refreshVacations = async () => {
+    const fetched = await getVacations();
+    const vacationsFull = await Promise.all(
+      fetched.map(async (vacation: Vacation) => {
+        const following = await checkFollowing(user!.id, vacation.id);
+        return { ...vacation, following };
+      })
+    );
+
+    const filteredVacations = vacationsFull.filter((vacation) => {
+      if (filters.followed && !vacation.following) {
+        return false;
+      }
+
+      if (filters.upcoming) {
+        return dayjs(vacation.start_date).isAfter(dayjs());
+      }
+
+      if (filters.current) {
+        return dayjs().isBetween(
+          dayjs(vacation.start_date),
+          dayjs(vacation.end_date)
+        );
+      }
+
+      return true;
+    });
+
+    setVacations(filteredVacations);
+    setPage(1);
+  };
+
   useEffect(() => {
-    const fetchAndFilterVacations = async () => {
-      const fetched = await getVacations();
-      const vacationsFull = await Promise.all(
-        fetched.map(async (vacation: Vacation) => {
-          const following = await checkFollowing(user!.id, vacation.id);
-          return { ...vacation, following };
-        })
-      );
-
-      const filteredVacations = vacationsFull.filter((vacation) => {
-        if (filters.followed && !vacation.following) {
-          return false;
-        }
-
-        if (filters.upcoming) {
-          return dayjs(vacation.start_date).isAfter(dayjs());
-        }
-
-        if (filters.current) {
-          return dayjs().isBetween(
-            dayjs(vacation.start_date),
-            dayjs(vacation.end_date)
-          );
-        }
-
-        return true;
-      });
-
-      setVacations(filteredVacations);
-      setPage(1);
-    };
-
-    fetchAndFilterVacations();
+    refreshVacations();
   }, [filters]);
 
   const changePage = (_event: React.ChangeEvent<unknown>, value: number) => {
@@ -76,7 +76,11 @@ export default function Vacations() {
         flexWrap="wrap"
       >
         {currentVacations.map((vacation) => (
-          <VacationCard key={vacation.id} vacation={vacation} />
+          <VacationCard
+            key={vacation.id}
+            vacation={vacation}
+            refresh={refreshVacations}
+          />
         ))}
       </Stack>
       <Stack spacing={2} paddingBottom={2} alignItems="center">

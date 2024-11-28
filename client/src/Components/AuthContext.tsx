@@ -25,6 +25,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
     }
     setLoading(false);
   }, [token]);
+
   const getVacations = () => {
     return axios
       .get("/vacations", { baseURL: "http://localhost:3000" })
@@ -170,19 +171,30 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
       });
   };
 
-  // TODO
   const handleEdit = (
     form: VacationForm,
-    vacation_id: number
+    vacation_id: number,
+    imageEdited: boolean
   ): Promise<boolean> => {
-    return axios
-      .put(`/vacation/${vacation_id}`, form)
-      .then(() => {
-        return true;
-      })
-      .catch(() => {
-        return false;
+    if (imageEdited) {
+      return axios
+        .put(`/vacation/${vacation_id}`, form, {
+          baseURL: "http://localhost:3000",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then(() => {
+          return true;
+        })
+        .catch(() => {
+          return false;
+        });
+    } else {
+      return axios.put(`vacation/${vacation_id}`, form, {
+        baseURL: "http://localhost:3000",
       });
+    }
   };
 
   const handleLogout = () => {

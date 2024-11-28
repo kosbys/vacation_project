@@ -17,8 +17,13 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { useNavigate } from "react-router";
 
-// DELETE AND EDIT FOR ADMIN
-export default function VacationCard({ vacation }: { vacation: Vacation }) {
+export default function VacationCard({
+  vacation,
+  refresh,
+}: {
+  vacation: Vacation;
+  refresh: () => Promise<void>;
+}) {
   const {
     user,
     handleFollow,
@@ -140,7 +145,9 @@ export default function VacationCard({ vacation }: { vacation: Vacation }) {
             </IconButton>
             <IconButton
               onClick={async () => {
-                handleDelete(vacation.id);
+                handleDelete(vacation.id).then(() => {
+                  refresh();
+                });
               }}
               aria-label="delete"
             >
