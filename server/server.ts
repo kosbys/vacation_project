@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import mysql from "mysql2";
+import mysql, { RowDataPacket } from "mysql2";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -8,7 +8,6 @@ import formidable, { Fields, Files } from "formidable";
 import path from "path";
 import { User } from "./types";
 import { hashPassword, comparePasswords } from "./passwordHelpers";
-import { error } from "console";
 
 dotenv.config();
 
@@ -19,6 +18,7 @@ const JWT_SECRET =
   "a086241da7c28c774676bb9074bd49edfe709abef83efc5a457992e183693f70";
 const imageFolder = path.join(__dirname, "public");
 
+// MOVE ALL DB QUERIES TO dbHelpers.ts
 const db = mysql.createConnection({
   host: "db", // "db" for docker otherwise "localhost"
   port: 3306,
@@ -194,7 +194,8 @@ app.post("/vacation", (req, res): void => {
   });
 });
 
-// investigate if this works
+// DELETE OLD IMAGE
+// FORMIDABLE CHANGE IMAGE
 app.put("/vacation/:id", (req, res) => {
   if (req.headers["content-type"] === "application/json") {
     const formattedDates = {
@@ -249,7 +250,12 @@ app.put("/vacation/:id", (req, res) => {
   }
 });
 
+// DELETE IMAGE FROM DB
+// UNLINK
+// filepath: '/app/public/fedb176d54a9827fa9ad4c900.jpg',
 app.delete("/vacation", (req, res) => {
+  const { vacation_id } = req.body;
+
   db.query(
     `DELETE FROM vacations WHERE vacations.id = ${req.body.vacation_id}`,
     (err) => {
