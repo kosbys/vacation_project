@@ -6,8 +6,10 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import formidable, { Fields, Files } from "formidable";
 import path from "path";
+import fs from "fs";
 import { User } from "./types";
 import { hashPassword, comparePasswords } from "./passwordHelpers";
+import { error } from "console";
 
 dotenv.config();
 
@@ -18,7 +20,6 @@ const JWT_SECRET =
   "a086241da7c28c774676bb9074bd49edfe709abef83efc5a457992e183693f70";
 const imageFolder = path.join(__dirname, "public");
 
-// MOVE ALL DB QUERIES TO dbHelpers.ts
 const db = mysql.createConnection({
   host: "db", // "db" for docker otherwise "localhost"
   port: 3306,
@@ -194,8 +195,6 @@ app.post("/vacation", (req, res): void => {
   });
 });
 
-// DELETE OLD IMAGE
-// FORMIDABLE CHANGE IMAGE
 app.put("/vacation/:id", (req, res) => {
   if (req.headers["content-type"] === "application/json") {
     const formattedDates = {
@@ -216,6 +215,25 @@ app.put("/vacation/:id", (req, res) => {
       }
     );
   } else {
+    db.query(
+      `SELECT image_name FROM vacations WHERE vacations.id = ${req.params.id}`,
+      (err, dbResponse: any[]) => {
+        if (err) {
+          res.status(500).json({ message: "DB error", error: err });
+          return;
+        }
+        const filename = dbResponse[0]!.image_name;
+
+        fs.unlink(`/app/public/${filename}`, (err) => {
+          if (err) {
+            res
+              .status(500)
+              .json({ message: "Image deletion error", error: err });
+          }
+        });
+      }
+    );
+
     const form = formidable({
       multiples: false,
       uploadDir: imageFolder,
@@ -250,14 +268,28 @@ app.put("/vacation/:id", (req, res) => {
   }
 });
 
-// DELETE IMAGE FROM DB
-// UNLINK
-// filepath: '/app/public/fedb176d54a9827fa9ad4c900.jpg',
 app.delete("/vacation", (req, res) => {
   const { vacation_id } = req.body;
 
   db.query(
-    `DELETE FROM vacations WHERE vacations.id = ${req.body.vacation_id}`,
+    `SELECT image_name FROM vacations WHERE vacations.id = ${vacation_id}`,
+    (err, dbResponse: any[]) => {
+      if (err) {
+        res.status(500).json({ message: "DB error", error: err });
+        return;
+      }
+      const filename = dbResponse[0]!.image_name;
+
+      fs.unlink(`/app/public/${filename}`, (err) => {
+        if (err) {
+          res.status(500).json({ message: "Image deletion error", error: err });
+        }
+      });
+    }
+  );
+
+  db.query(
+    `DELETE FROM vacations WHERE vacations.id = ${vacation_id}`,
     (err) => {
       if (err) {
         res.status(500).json({ message: "DB error", error: err });
@@ -267,7 +299,7 @@ app.delete("/vacation", (req, res) => {
 
   res
     .status(200)
-    .json({ message: `Deleted vacation with ID of ${req.body.vacation_id}` });
+    .json({ message: `Deleted vacation with ID of ${vacation_id}` });
 });
 
 app.post("/follow", (req, res) => {

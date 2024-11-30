@@ -15,8 +15,9 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import dayjs from "dayjs";
 import { useContext, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import { AuthContext } from "./AuthContext";
+import SuccessAlert from "./SuccessAlert";
 
 interface FormData {
   destination: string;
@@ -95,7 +96,6 @@ export default function EditVacation() {
       endDate: dayjs(state.end_date).toDate(),
     },
   });
-  const navigate = useNavigate();
 
   const { handleEdit } = useContext(AuthContext)!;
 
@@ -104,6 +104,10 @@ export default function EditVacation() {
   );
   const [dateError, setDateError] = useState(false);
   const [imageEdited, setImageEdited] = useState(false);
+  const [successAlert, setSuccessAlert] = useState({
+    message: "",
+    open: false,
+  });
 
   const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -125,7 +129,7 @@ export default function EditVacation() {
   const onSubmit: SubmitHandler<FormData> = (data) => {
     if (dayjs(data.startDate).isBefore(data.endDate)) {
       handleEdit(data, state.id, imageEdited);
-      navigate("/vacations");
+      setSuccessAlert({ message: "Successfully edited vacation", open: true });
     } else {
       setDateError(true);
     }
@@ -142,6 +146,13 @@ export default function EditVacation() {
         boxShadow: 3,
       }}
     >
+      <SuccessAlert
+        handleClose={() => {
+          setSuccessAlert({ message: "", open: false });
+        }}
+        message={successAlert.message}
+        open={successAlert.open}
+      />
       <Typography
         sx={{ textAlign: "center" }}
         color="primary"
