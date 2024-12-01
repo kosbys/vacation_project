@@ -78,7 +78,7 @@ app.post("/register", (req: Request, res: Response): void => {
                 },
                 JWT_SECRET,
                 {
-                  expiresIn: "24h",
+                  expiresIn: "1h",
                 }
               );
 
@@ -136,7 +136,7 @@ app.post("/login", (req: Request, res: Response): void => {
             },
             JWT_SECRET,
             {
-              expiresIn: "24h",
+              expiresIn: "1h",
             }
           );
 
