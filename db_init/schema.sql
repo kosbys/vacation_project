@@ -28,5 +28,6 @@ CREATE TABLE IF NOT EXISTS follows (
   CONSTRAINT `follows_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `follows_ibfk_2` FOREIGN KEY (`vacation_id`) REFERENCES `vacations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+-- password is admin
 INSERT IGNORE INTO users (first_name, last_name, email, password, role) 
 VALUES ('Super', 'User', 'admin@admin.com', '$2a$10$.9adFfxjD9wV7Nv5PPIDtuZQa47y0hT7bf1qT5RU48V7RoOLaf.be', 'admin');

@@ -7,6 +7,8 @@ import VacationFilters from "./VacationFilters";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 
+dayjs.extend(isBetween);
+
 export default function Vacations() {
   const { getVacations, checkFollowing, user } = useContext(AuthContext)!;
   const [vacations, setVacations] = useState<Vacation[]>([]);
