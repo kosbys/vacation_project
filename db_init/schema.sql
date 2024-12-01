@@ -3,7 +3,7 @@ USE vacation_app;
 CREATE TABLE IF NOT EXISTS vacations (
   `id` INT NOT NULL AUTO_INCREMENT,
   `destination` VARCHAR(255) NOT NULL,
-  `description` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(2056) NOT NULL,
   `start_date` DATE NOT NULL,
   `end_date` DATE NOT NULL,
   `price` INT UNSIGNED NOT NULL,
