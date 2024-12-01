@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
-import mysql, { RowDataPacket } from "mysql2";
+import mysql from "mysql2";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -9,7 +9,6 @@ import path from "path";
 import fs from "fs";
 import { User } from "./types";
 import { hashPassword, comparePasswords } from "./passwordHelpers";
-import { error } from "console";
 
 dotenv.config();
 
