@@ -26,7 +26,7 @@ const validationSchema = Joi.object({
     "string.email": "Please enter a destination",
     "any.required": "Destination is required",
   }),
-  description: Joi.string().required().max(255).messages({
+  description: Joi.string().required().max(2056).messages({
     "string.empty": "Please enter a description",
     "string.max": "Description too long",
     "any.required": "Description is required",
