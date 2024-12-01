@@ -19,6 +19,11 @@ type Vacation = {
   following: boolean;
 };
 
+type VacationFollowData = {
+  destination: string;
+  followers: number;
+};
+
 type RegisterForm = {
   firstName: string;
   lastName: string;
@@ -76,6 +81,7 @@ export type {
   User,
   Vacation,
   RegisterForm,
+  VacationFollowData,
   VacationForm,
   Filters,
   LoginForm,
