@@ -123,7 +123,7 @@ app.post("/login", (req: Request, res: Response): void => {
       comparePasswords(password, user.password)
         .then((match) => {
           if (!match) {
-            res.status(400).json({ message: "Invalid password" });
+            res.status(401).json({ message: "Invalid password" });
             return;
           }
 
