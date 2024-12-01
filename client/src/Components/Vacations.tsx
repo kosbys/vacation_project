@@ -6,7 +6,6 @@ import VacationCard from "./VacationCard";
 import VacationFilters from "./VacationFilters";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
-import { useLocation } from "react-router";
 
 export default function Vacations() {
   const { getVacations, checkFollowing, user } = useContext(AuthContext)!;
