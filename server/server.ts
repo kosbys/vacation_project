@@ -20,7 +20,7 @@ const JWT_SECRET =
 const imageFolder = path.join(__dirname, "public");
 
 const db = mysql.createConnection({
-  host: "db", // "db" for docker otherwise "localhost"
+  host: "localhost", // "db" for docker otherwise "localhost"
   port: 3306,
   user: "root",
   database: "vacation_app",
@@ -78,7 +78,7 @@ app.post("/register", (req: Request, res: Response): void => {
                 },
                 JWT_SECRET,
                 {
-                  expiresIn: "24h",
+                  expiresIn: "1h",
                 }
               );
 
@@ -136,7 +136,7 @@ app.post("/login", (req: Request, res: Response): void => {
             },
             JWT_SECRET,
             {
-              expiresIn: "24h",
+              expiresIn: "1h",
             }
           );
 
@@ -223,7 +223,7 @@ app.put("/vacation/:id", (req, res) => {
         }
         const filename = dbResponse[0]!.image_name;
 
-        fs.unlink(`/app/public/${filename}`, (err) => {
+        fs.unlink(path.join(__dirname, `/public/${filename}`), (err) => {
           if (err) {
             res
               .status(500)
@@ -279,9 +279,10 @@ app.delete("/vacation", (req, res) => {
       }
       const filename = dbResponse[0]!.image_name;
 
-      fs.unlink(`/app/public/${filename}`, (err) => {
+      fs.unlink(path.join(__dirname, `/public/${filename}`), (err) => {
         if (err) {
           res.status(500).json({ message: "Image deletion error", error: err });
+          return;
         }
       });
     }
@@ -292,6 +293,7 @@ app.delete("/vacation", (req, res) => {
     (err) => {
       if (err) {
         res.status(500).json({ message: "DB error", error: err });
+        return;
       }
     }
   );
