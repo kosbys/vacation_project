@@ -62,7 +62,7 @@ export default function VacationCard({
         onClose={handleClose}
         refresh={refresh}
       />
-      <Card sx={{ width: 400, maxHeight: 600 }}>
+      <Card sx={{ width: 400, maxHeight: 700 }}>
         <CardHeader
           title={
             <Stack direction="row">
@@ -123,6 +123,7 @@ export default function VacationCard({
           <Stack>
             <Typography
               paddingLeft={2}
+              height={200}
               paddingBottom={2}
               variant="body2"
               sx={{ color: "text.secondary" }}
