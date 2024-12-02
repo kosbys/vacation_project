@@ -20,7 +20,7 @@ const JWT_SECRET =
 const imageFolder = path.join(__dirname, "public");
 
 const db = mysql.createConnection({
-  host: "db", // "db" for docker otherwise "localhost"
+  host: "localhost", // "db" for docker otherwise "localhost"
   port: 3306,
   user: "root",
   database: "vacation_app",
