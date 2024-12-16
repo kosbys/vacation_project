@@ -50,7 +50,7 @@ export default function Report() {
         justifyItems="center"
         gap={2}
       >
-        <BarChart width={800} height={500} data={data} margin={{ top: 20 }}>
+        <BarChart width={1000} height={700} data={data} margin={{ top: 20 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis fontFamily="Roboto" dataKey="destination" />
           <YAxis />

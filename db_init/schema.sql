@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS follows (
   CONSTRAINT `follows_ibfk_2` FOREIGN KEY (`vacation_id`) REFERENCES `vacations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 -- password is admin
-INSERT IGNORE INTO users (first_name, last_name, email, password, role) 
+INSERT IGNORE INTO `users` (`first_name`, `last_name`, `email`, `password`, `role`) 
 VALUES ('Super', 'User', 'admin@admin.com', '$2a$10$.9adFfxjD9wV7Nv5PPIDtuZQa47y0hT7bf1qT5RU48V7RoOLaf.be', 'admin');
 
 INSERT IGNORE INTO `vacations` (`id`, `destination`, `description`, `start_date`, `end_date`, `price`, `image_name`) VALUES
@@ -45,3 +45,50 @@ INSERT IGNORE INTO `vacations` (`id`, `destination`, `description`, `start_date`
 (39, 'Haifa', 'Please visit Haifa', '2024-12-23', '2025-01-08', 1, 'db27f9799304aa911724fa30a.jpg'),
 (40, 'Barcelona', 'Barcelona amet porta neque aliquam consectetur ligula. Ipsum leo consectetur magnis, quis per nascetur suscipit taciti mollis. Leo suscipit curae habitant etiam eleifend. Volutpat nunc nam lacus potenti eros nec platea? Eget ligula vestibulum laoreet nulla egestas pretium. Aptent quis inceptos ultrices bibendum bibendum. Mi eleifend eleifend ridiculus facilisis tristique morbi blandit; ut dolor. Senectus fringilla bibendum parturient bibendum porttitor finibus.', '2024-12-01', '2025-06-24', 5500, 'db27f9799304aa911724fa30b.jpg'),
 (41, 'Rome', 'Roma quisque nisi tortor lectus ipsum. Fusce pretium parturient dapibus mauris aliquet praesent fermentum. Gravida lacinia posuere praesent vel iaculis sagittis augue euismod. Donec rutrum consectetur consequat nam in lectus. Facilisis feugiat elit a fames dapibus, nullam eu mi. Curabitur vitae rhoncus adipiscing finibus in maximus donec consectetur habitant.', '2024-12-10', '2025-11-11', 10000, 'db27f9799304aa911724fa30c.jpg');
+
+
+INSERT IGNORE INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `role`) VALUES
+(21, 'admin', 'admin', 'admin@admin.com', '$2a$10$.9adFfxjD9wV7Nv5PPIDtuZQa47y0hT7bf1qT5RU48V7RoOLaf.be', 'admin'),
+(22, 'Test', 'User', 'test@user.com', '$2a$10$SGcfLTX1sHwiFx5R00UF6e3iSrf5sCF8rHXJm129YsfOc0bleYU2K', 'user'),
+(23, 'John', 'Johnson', 'john@john.com', '$2a$10$CPDg5IScJPYzDjp0wmQtXetQuYxkgSTmALzlGUoP1eCF9vLth/rhq', 'user'),
+(24, 'Cohen', 'Cohen', 'cohen@cohen.cohen', '$2a$10$GEWBGRb1pwKxw1l5E6JJjOhrMeRtetRKwjNw08MTnTE90sCx5EC8O', 'user'),
+(25, 'a', 'b', 'a@b.com', '$2a$10$L4GJcQ60XZZw.z2E607ygus5vHzK7Wo40cTppzoPwT0YM4P/j/BWa', 'user'),
+(26, 'c', 'f', 'c@d.com', '$2a$10$jrhJFy/FzTQ3RKt5mu95cuZH7UrYcMIrwXqe1Z1JiFOSEYxYwGErq', 'user');
+
+INSERT IGNORE INTO `follows` (`user_id`, `vacation_id`) VALUES
+(22, 30),
+(22, 32),
+(22, 37),
+(22, 41),
+(23, 31),
+(23, 33),
+(23, 37),
+(23, 41),
+(24, 31),
+(24, 34),
+(24, 35),
+(24, 38),
+(24, 39),
+(24, 41),
+(25, 30),
+(25, 31),
+(25, 32),
+(25, 33),
+(25, 34),
+(25, 35),
+(25, 36),
+(25, 37),
+(25, 38),
+(25, 39),
+(25, 41),
+(26, 30),
+(26, 31),
+(26, 32),
+(26, 33),
+(26, 34),
+(26, 35),
+(26, 36),
+(26, 37),
+(26, 38),
+(26, 39),
+(26, 41);
