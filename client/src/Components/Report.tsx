@@ -16,7 +16,7 @@ export default function Report() {
       const vacationsFollowed = await Promise.all(
         vacations.map(async (vacation) => {
           const follows = await checkFollowingNumber(vacation.id);
-          return { destination: vacation.destination, followers: follows };
+          return { destination: vacation.destination, Followers: follows };
         })
       );
 
@@ -50,16 +50,16 @@ export default function Report() {
         justifyItems="center"
         gap={2}
       >
-        <BarChart width={1000} height={700} data={data} margin={{ top: 20 }}>
+        <BarChart width={1000} height={1200} data={data} margin={{ top: 20 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis fontFamily="Roboto" dataKey="destination" />
+          <XAxis fontFamily="Roboto" dataKey="destination" interval={0} />
           <YAxis />
           <Tooltip
             contentStyle={{
               fontFamily: "Roboto",
             }}
           />
-          <Bar dataKey="followers" fill="#3f50b5" />
+          <Bar dataKey="Followers" fill="#3f50b5" />
         </BarChart>
         <Button
           variant="contained"
