@@ -130,11 +130,7 @@ export default function VacationCard({
             >
               {vacation.description}
             </Typography>
-            <Chip
-              width={300}
-              label={`$${vacation.price}`}
-              color="primary"
-            ></Chip>
+            <Chip label={`$${vacation.price}`} color="primary"></Chip>
           </Stack>
         </CardContent>
         <CardActions disableSpacing>
