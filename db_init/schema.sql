@@ -48,7 +48,6 @@ INSERT IGNORE INTO `vacations` (`id`, `destination`, `description`, `start_date`
 
 
 INSERT IGNORE INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `role`) VALUES
-(21, 'admin', 'admin', 'admin@admin.com', '$2a$10$.9adFfxjD9wV7Nv5PPIDtuZQa47y0hT7bf1qT5RU48V7RoOLaf.be', 'admin'),
 (22, 'Test', 'User', 'test@user.com', '$2a$10$SGcfLTX1sHwiFx5R00UF6e3iSrf5sCF8rHXJm129YsfOc0bleYU2K', 'user'),
 (23, 'John', 'Johnson', 'john@john.com', '$2a$10$CPDg5IScJPYzDjp0wmQtXetQuYxkgSTmALzlGUoP1eCF9vLth/rhq', 'user'),
 (24, 'Cohen', 'Cohen', 'cohen@cohen.cohen', '$2a$10$GEWBGRb1pwKxw1l5E6JJjOhrMeRtetRKwjNw08MTnTE90sCx5EC8O', 'user'),

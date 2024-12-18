@@ -130,17 +130,11 @@ export default function VacationCard({
             >
               {vacation.description}
             </Typography>
-            <Button
-              disableRipple
-              disableFocusRipple
-              disableElevation
-              fullWidth
-              variant="contained"
+            <Chip
+              width={300}
+              label={`$${vacation.price}`}
               color="primary"
-              sx={{ alignSelf: "center", justifySelf: "center" }}
-            >
-              ${vacation.price}
-            </Button>
+            ></Chip>
           </Stack>
         </CardContent>
         <CardActions disableSpacing>
