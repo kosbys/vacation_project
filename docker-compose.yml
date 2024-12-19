@@ -16,6 +16,18 @@ services:
       MYSQL_DATABASE: vacation_app
     volumes:
       - ./db_init:/docker-entrypoint-initdb.d
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+
   server:
     build:
       context: ./server
