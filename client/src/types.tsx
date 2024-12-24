@@ -21,7 +21,7 @@ type Vacation = {
 
 type VacationFollowData = {
   destination: string;
-  followers: number;
+  Followers: number;
 };
 
 type RegisterForm = {
