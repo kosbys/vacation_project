@@ -100,7 +100,7 @@ export default function EditVacation() {
   const { handleEdit } = useContext(AuthContext)!;
 
   const [imagePreview, setImagePreview] = useState<string | null>(
-    `http://localhost:3000/public/${state.image_name}`
+    `https://backend-8ydc.onrender.com/public/${state.image_name}`
   );
   const [dateError, setDateError] = useState(false);
   const [imageEdited, setImageEdited] = useState(false);

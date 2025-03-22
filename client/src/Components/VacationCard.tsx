@@ -114,7 +114,7 @@ export default function VacationCard({
         />
         <CardMedia
           component="img"
-          image={`http://localhost:3000/public/${vacation.image_name}`}
+          image={`https://backend-8ydc.onrender.com/public/${vacation.image_name}`}
           alt={vacation.destination}
           height={200}
           width={200}

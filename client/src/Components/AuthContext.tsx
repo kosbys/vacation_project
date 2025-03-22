@@ -28,7 +28,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
 
   const getVacations = () => {
     return axios
-      .get("/vacations", { baseURL: "http://localhost:3000" })
+      .get("/vacations", { baseURL: "https://backend-8ydc.onrender.com" })
       .then((res) => {
         return res.data;
       })
@@ -41,7 +41,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
   const checkFollowingNumber = (vacation_id: number): Promise<number> => {
     return axios
       .get("/following_number", {
-        baseURL: "http://localhost:3000",
+        baseURL: "https://backend-8ydc.onrender.com",
         params: { vacation_id },
       })
       .then((res) => {
@@ -58,7 +58,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
   ): Promise<boolean> => {
     return axios
       .get("/following", {
-        baseURL: "http://localhost:3000",
+        baseURL: "https://backend-8ydc.onrender.com",
         params: { user_id, vacation_id },
       })
       .then((res) => {
@@ -75,7 +75,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
         "/login",
         { email, password },
         {
-          baseURL: "http://localhost:3000",
+          baseURL: "https://backend-8ydc.onrender.com",
         }
       )
       .then((res) => {
@@ -94,7 +94,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
   const handleRegister = (form: RegisterForm): Promise<boolean> => {
     return axios
       .post("/register", form, {
-        baseURL: "http://localhost:3000",
+        baseURL: "https://backend-8ydc.onrender.com",
       })
       .then((res) => {
         setToken(res.data.token);
@@ -115,7 +115,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
           user_id: user?.id,
           vacation_id,
         },
-        { baseURL: "http://localhost:3000" }
+        { baseURL: "https://backend-8ydc.onrender.com" }
       )
       .then(() => {
         return true;
@@ -128,7 +128,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
   const handleUnFollow = (vacation_id: number): Promise<boolean> => {
     return axios
       .delete("/unfollow", {
-        baseURL: "http://localhost:3000",
+        baseURL: "https://backend-8ydc.onrender.com",
         data: { user_id: user?.id, vacation_id },
       })
       .then(() => {
@@ -142,7 +142,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
   const handleUpload = (form: VacationForm): Promise<boolean> => {
     return axios
       .post("/vacation", form, {
-        baseURL: "http://localhost:3000",
+        baseURL: "https://backend-8ydc.onrender.com",
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -160,7 +160,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
     return axios
       .delete("/vacation", {
         data: { vacation_id },
-        baseURL: "http://localhost:3000",
+        baseURL: "https://backend-8ydc.onrender.com",
       })
       .then(() => {
         return true;
@@ -179,7 +179,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
     if (imageEdited) {
       return axios
         .put(`/vacation/${vacation_id}`, form, {
-          baseURL: "http://localhost:3000",
+          baseURL: "https://backend-8ydc.onrender.com",
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -192,7 +192,7 @@ const AuthProvider = ({ children }: AuthProviderChildren) => {
         });
     } else {
       return axios.put(`vacation/${vacation_id}`, form, {
-        baseURL: "http://localhost:3000",
+        baseURL: "https://backend-8ydc.onrender.com",
       });
     }
   };
