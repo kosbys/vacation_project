@@ -110,13 +110,9 @@ INSERT INTO `vacations` (`id`, `destination`, `description`, `start_date`, `end_
 (36, 'Hawaii', 'Hawaii ridiculus cursus cras hendrerit orci nunc nostra mauris. Sagittis ullamcorper nulla vitae pharetra ridiculus ut. Interdum augue posuere aliquam convallis cursus dignissim. Et nec netus risus varius ante parturient. Venenatis orci scelerisque condimentum sagittis congue vivamus erat vel. Lectus morbi lacinia nullam ultricies imperdiet; hac luctus euismod. Montes porta in nascetur massa nunc condimentum integer. Felis molestie placerat cursus, consectetur ultrices efficitur etiam arcu.', '2024-12-27', '2024-12-30', 9500, 'db27f9799304aa911724fa307.jpg'),
 (37, 'Maldives', 'Maldives habitasse ornare penatibus adipiscing iaculis ultricies. Donec proin elit platea dictum non magnis. Cras vulputate accumsan aenean accumsan in himenaeos quam. Commodo maecenas ante mi ultrices, lacinia himenaeos ut libero. Elementum lacinia luctus vel, sapien volutpat mi semper cubilia. Diam purus justo odio bibendum senectus class, auctor auctor gravida. Hac pulvinar interdum morbi eget diam at. Dictum inceptos eleifend eget eleifend conubia laoreet morbi dolor.', '2025-04-29', '2025-06-25', 4700, 'db27f9799304aa911724fa308.jpg'),
 (38, 'Jerusalem', 'Jerusalem sed praesent auctor dui aliquet aptent semper sodales maximus. Viverra ultrices dictumst venenatis ante hendrerit sagittis curabitur elit. Hendrerit massa nostra auctor praesent orci varius lacinia. Arcu litora vivamus ridiculus vel et nec. Congue in maecenas eu in blandit dolor. Nec sociosqu tristique pulvinar dapibus cubilia tincidunt, donec consectetur magnis. Suspendisse platea per habitant tristique nisi; ridiculus egestas. Vel rutrum sapien netus quam a.', '2025-02-11', '2025-05-20', 2000, 'db27f9799304aa911724fa309.jpg'),
-(39, 'Haifa', 'Please visit Haifa', '2024-12-23', '2025-01-08', 1, 'db27f9799304aa911724fa30a.jpg'),
+(39, 'Haifa', 'Haifa sed praesent auctor dui aliquet aptent semper sodales maximus. Viverra ultrices dictumst venenatis ante hendrerit sagittis curabitur elit. Hendrerit massa nostra auctor praesent orci varius lacinia. Arcu litora vivamus ridiculus vel et nec. Congue in maecenas eu in blandit dolor. Nec sociosqu tristique pulvinar dapibus cubilia tincidunt, donec consectetur magnis. Suspendisse platea per habitant tristique nisi; ridiculus egestas. Vel rutrum sapien netus quam a.', '2024-12-23', '2025-01-08', 1, 'db27f9799304aa911724fa30a.jpg'),
 (40, 'Barcelona', 'Barcelona amet porta neque aliquam consectetur ligula. Ipsum leo consectetur magnis, quis per nascetur suscipit taciti mollis. Leo suscipit curae habitant etiam eleifend. Volutpat nunc nam lacus potenti eros nec platea? Eget ligula vestibulum laoreet nulla egestas pretium. Aptent quis inceptos ultrices bibendum bibendum. Mi eleifend eleifend ridiculus facilisis tristique morbi blandit; ut dolor. Senectus fringilla bibendum parturient bibendum porttitor finibus.', '2024-12-01', '2025-06-24', 5500, 'db27f9799304aa911724fa30b.jpg'),
 (41, 'Rome', 'Roma quisque nisi tortor lectus ipsum. Fusce pretium parturient dapibus mauris aliquet praesent fermentum. Gravida lacinia posuere praesent vel iaculis sagittis augue euismod. Donec rutrum consectetur consequat nam in lectus. Facilisis feugiat elit a fames dapibus, nullam eu mi. Curabitur vitae rhoncus adipiscing finibus in maximus donec consectetur habitant.', '2024-12-10', '2025-11-11', 10000, 'db27f9799304aa911724fa30c.jpg');
-
---
--- Indexes for dumped tables
---
 
 --
 -- Indexes for table `follows`
@@ -153,10 +149,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `vacations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
-
---
--- Constraints for dumped tables
---
 
 --
 -- Constraints for table `follows`

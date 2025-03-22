@@ -14,16 +14,15 @@ dotenv.config();
 
 const app: Application = express();
 const PORT = process.env.PORT;
-const JWT_SECRET =
-  process.env.JWT_SECRET ||
-  "a086241da7c28c774676bb9074bd49edfe709abef83efc5a457992e183693f70";
+const JWT_SECRET = process.env.JWT_SECRET as string;
 const imageFolder = path.join(__dirname, "public");
 
 const db = mysql.createConnection({
-  host: "db", // "db" for docker otherwise "localhost"
+  host: process.env.HOST,
   port: 3306,
-  user: "root",
-  database: "vacation_app",
+  user: process.env.USER,
+  database: process.env.DATABASE,
+  password: process.env.PASSWORD,
 });
 
 db.connect((err) => {
