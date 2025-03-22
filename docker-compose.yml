@@ -6,17 +6,6 @@ services:
       - "5173:5173"
     depends_on:
       - server
-  db:
-    image: mysql:8.0
-    container_name: mysql
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DATABASE: vacation_app
-    volumes:
-      - ./db_init:/docker-entrypoint-initdb.d
-
   server:
     build:
       context: ./server
